@@ -1,0 +1,86 @@
+---
+
+- name: Check configuration
+  assert:
+    that:
+    - graph_core_request|int > 0
+    - graph_core_limit|int >= graph_core_request|int
+    - graph_password|string|length > 0
+    - graph_password|string != 'neo4j'
+
+# Check or create the namespace...
+
+- name: Get expected namespace
+  k8s_info:
+    kind: Namespace
+    name: "{{ graph_namespace }}"
+  register: namespace_info
+
+- name: Assert namespace exists
+  assert:
+    that: namespace_info.resources|length > 0
+    fail_msg: Namespace '{{ graph_namespace }}' does not exist
+  when: graph_volume_size_g|int == 0
+
+- name: Create namespace
+  k8s:
+    definition: "{{ lookup('template', 'namespace.yaml.j2') }}"
+  when: graph_volume_size_g|int > 0
+
+# Deploy volume claims
+
+- name: Assert volume variables
+  assert:
+    that: graph_pvc_storage_class|length > 0
+  when: graph_volume_size_g|int > 0
+
+- name: Deploy volume claim
+  k8s:
+    definition: "{{ lookup('template', 'graph-pvc.yaml.j2') }}"
+    wait: yes
+  when: graph_volume_size_g|int > 0
+
+# Deploy other objects
+
+- name: Check graph Deployment
+  k8s_info:
+    kind: Deployment
+    name: graph-pod
+    namespace: "{{ graph_namespace }}"
+  register: deployment_result
+
+- name: Deploy secrets
+  k8s:
+    definition: "{{ lookup('template', 'secrets.yaml.j2') }}"
+  when: deployment_result.resources|length == 0
+
+# And service account...
+
+- name: Deploy service account
+  k8s:
+    definition: "{{ lookup('template', 'service-account.yaml.j2') }}"
+  when: deployment_result.resources|length == 0
+
+# Deploy the loader?
+# Only if the graph is not already deployed.
+
+- import_tasks: deploy-loader.yaml
+  when:
+  - graph_loader_deploy|bool
+  - deployment_result.resources|length == 0
+
+# Deploy the graph...
+
+- name: Deploy Graph
+  k8s:
+    definition: "{{ lookup('template', 'graph-deployment.yaml.j2') }}"
+    wait: yes
+    wait_timeout: "{{ graph_pod_ready_timeout }}"
+  when: deployment_result.resources|length == 0
+
+- name: Deploy Graph Services
+  k8s:
+    definition: "{{ lookup('template', item) }}"
+  loop:
+  - http-service.yaml.j2
+  - bolt-service.yaml.j2

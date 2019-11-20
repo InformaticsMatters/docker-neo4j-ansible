@@ -1,2 +1,41 @@
 # docker-neo4j-ansible
-Ansible Playbooks (and Roles) for docker-neo4j
+Ansible Playbooks (and Roles) for the docker-neo4j project.
+
+The main `site` playbook allows for the deployment (and removal)
+of a neo4j server and fragment network. The playbook employs the
+docker-neo4j loader image to pull data from S3 prior to starting
+a neo4j instance using the data.
+
+Inspect `roles/graph/defaults/main.yaml` in order to configure the
+deployment for your needs.
+
+>   This role expects AWS and Kubernetes credentials, which are
+    normally _injected_ into the play by our Ansible AWX (Tower) server.
+
+## Usage
+Declare cluster credentials that, for Kubernetes, consist of a `HOST`
+and an `API_KEY`: -
+
+    $ export K8S_AUTH_HOST=https://1.2.3.4:6443
+    $ export K8S_AUTH_API_KEY=kubeconfig-user-tb4rm.c-tbgrt:12345678
+    $ export K8S_AUTH_VERIFY_SSL=No 
+
+>   The host and API key typically come from the kube config file,
+    the API coming from the user token.
+
+You'll also need AWS credentials to access the graph data (expected in
+an S3 bucket): -
+
+    $ export AWS_ACCESS_KEY_ID=1234
+    $ export AWS_SECRET_ACCESS_KEY=abcdefghi
+
+With credentials set you should be able to run the main playbook: -
+
+    $ ansible-playbook site.yaml
+
+>   The `ansible.cfg` and `inventory.yaml` files exist simply to avoid
+    playbook warnings when running from the command-line within this project.
+    When run from AWX (Ansible Tower) a 'real' inventory will be provided
+    and `ansible.cfg` and `inventory.yaml` become unnecessary.
+
+---

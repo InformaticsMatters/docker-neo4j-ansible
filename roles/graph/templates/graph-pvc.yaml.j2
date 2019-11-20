@@ -1,0 +1,13 @@
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ graph_pvc }}
+  namespace: {{ graph_namespace }}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ graph_volume_size_g }}Gi
+  storageClassName: "{{ graph_pvc_storage_class }}"

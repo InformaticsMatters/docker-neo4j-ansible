@@ -1,0 +1,25 @@
+---
+
+# The 'grand' play.
+# Install or remove the installation
+# based on whether the 'deploy' variable is yes or no...
+
+# Install essential modules
+- name: Install required modules
+  pip:
+    name: openshift==0.10.0
+    extra_args: --user
+
+# An API and key must be set
+- name: Assert authentication
+  assert:
+    that:
+    - k8s_api|length > 0
+    - k8s_api_key|length > 0
+
+# Go...
+
+- include_tasks: deploy.yaml
+  when: graph_deploy|bool
+- include_tasks: undeploy.yaml
+  when: not graph_deploy|bool

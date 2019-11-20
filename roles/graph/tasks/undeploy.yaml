@@ -1,0 +1,26 @@
+---
+
+# We either remove all the objects we added
+# (when the namespace and pvc are pre-provisioned)
+# or we just destroy the whole namespace (and the PVC we created).
+
+- name: Remove application objects
+  k8s:
+    definition: "{{ lookup('template', item) }}"
+    state: absent
+    wait: yes
+  loop:
+  - secrets.yaml.j2
+  - loader-job.yaml.j2
+  - graph-deployment.yaml.j2
+  - http-service.yaml.j2
+  - bolt-service.yaml.j2
+  - service-account.yaml.j2
+  when: graph_volume_size_g|int == 0
+
+- name: Remove namespace
+  k8s:
+    definition: "{{ lookup('template', 'namespace.yaml.j2') }}"
+    state: absent
+    wait: yes
+  when: graph_volume_size_g|int > 0

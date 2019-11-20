@@ -1,0 +1,73 @@
+---
+
+# Deploy (set to 'no' to un-deploy)
+graph_deploy: yes
+
+# The deployment namespace,
+# the graph PVC name, which is either pre-previsioned or self-provisioned (see below)
+# and the graph password (which cannot be neo4j).
+# The password is saved in secrets deployed to the project.
+graph_namespace: graph-experiment
+graph_pvc: graph
+graph_password: "{{ lookup('password',  '/dev/null length=12 chars=ascii_letters') }}"
+# If you want the role to create the PVC and namespace
+# (i.e. it is not pre-provisioned) then
+# set a value for 'graph_volume_size_g'.
+# If you have pre-provisioned the PVC (and namespace)
+# then set 'graph_volume_size_g' to 0.
+#
+# If you define a volume size then you need to
+# define a storage class.
+graph_volume_size_g: 295
+graph_pvc_storage_class: local-disk1
+
+# The origin of the graph data.
+# It's on an S3 bucket and a path...
+graph_bucket: im-fragnet
+graph_bucket_path: build/vendor/toxcast/2019-10-24/build-1
+# Set to 'yes' (the string, not the YAML boolean)
+# to wipe the graph data directory prior to the sync.
+# This value is passed to the graph loader's container.
+graph_wipe: 'yes'
+# Path to cypher scripts.
+# default content can be found in files directory.
+# Set to an empty string to skip.
+graph_cypher_once_script: cypher-script.once
+graph_cypher_always_script: cypher-script.always
+
+# Container images.
+# There's an S3 'loader' and a 'graph'
+graph_loader_image: informaticsmatters/neo4j-s3-loader
+graph_loader_tag: '3.5'
+graph_image: informaticsmatters/neo4j
+graph_tag: '3.5'
+graph_pull_policy: IfNotPresent
+graph_loader_deploy: yes
+
+# Graph image memory sizing...
+graph_pagecache_size_g: 8
+graph_heap_g: 8
+graph_mem_request_g: 24
+# The CPU core request and limit.
+# Measured in whole cores.
+graph_core_request: 1
+graph_core_limit: 4
+
+# Timeout for loader and graph pod timeouts...
+graph_loader_pod_ready_timeout: 600
+graph_pod_ready_timeout: 1800
+
+#------------------------------------------------------------------------------
+
+# Picked up from the environment
+# (typically injected by AWX/Tower)...
+
+aws_access_key_id: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
+aws_secret_access_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
+
+# We don't use the Kubernetes credentials directly,
+# but we load them into variables here from their
+# expected environment variables so that we can assert they've been set.
+
+k8s_api: "{{ lookup('env', 'K8S_AUTH_HOST') }}"
+k8s_api_key: "{{ lookup('env', 'K8S_AUTH_API_KEY') }}"
