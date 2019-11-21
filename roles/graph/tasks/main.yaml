@@ -1,5 +1,9 @@
 ---
 
+# Expose ansible version
+- debug:
+    var: ansible_version.full
+
 # The 'grand' play.
 # Install or remove the installation
 # based on whether the 'deploy' variable is yes or no...
