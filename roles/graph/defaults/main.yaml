@@ -46,9 +46,9 @@ graph_pull_policy: IfNotPresent
 graph_loader_deploy: yes
 
 # Graph image memory sizing...
-graph_pagecache_size_g: 8
+graph_pagecache_size_g: 32
 graph_heap_g: 8
-graph_mem_request_g: 24
+graph_mem_request_g: 48
 # The CPU core request and limit.
 # Measured in whole cores.
 graph_core_request: 1
