@@ -13,6 +13,12 @@ deployment for your needs.
     normally _injected_ into the play by our Ansible AWX (Tower) server.
 
 ## Usage
+Run the same ansible the AWX server is likely to be running
+(ideally from within a virtual environment)...
+
+    $ conda activate docker-neo4j-ansible
+    $ pip install -r requirements.txt
+
 Declare cluster credentials that, for Kubernetes, consist of a `HOST`
 and an `API_KEY`: -
 

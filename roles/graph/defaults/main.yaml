@@ -4,12 +4,11 @@
 graph_deploy: yes
 
 # The: -
-# - deployment namespace,
 # - graph PVC name,
 #   which is either pre-previsioned or self-provisioned (see below)
-# - graph password (which cannot be neo4j)
-#   The password is saved in secrets deployed to the project.
-graph_namespace: fragnet-graph
+# - graph (neo4j) password (which cannot be neo4j)
+#   The password is saved in secrets deployed to the namespace.
+#   The username is assumed to be 'neo4j'
 graph_pvc: graph
 graph_password: "{{ lookup('password',  '/dev/null length=12 chars=ascii_letters') }}"
 # If you want the role to create the PVC and namespace
