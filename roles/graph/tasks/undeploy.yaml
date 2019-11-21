@@ -15,7 +15,6 @@
   - graph-deployment.yaml.j2
   - http-service.yaml.j2
   - bolt-service.yaml.j2
-  - service-account.yaml.j2
   when: graph_volume_size_g|int == 0
 
 - name: Remove namespace

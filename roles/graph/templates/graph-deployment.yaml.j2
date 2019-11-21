@@ -14,7 +14,6 @@ spec:
       labels:
         name: graph-pod
     spec:
-      serviceAccountName: graph
       containers:
       - name: graph-pod
         image: {{ graph_image }}:{{ graph_tag }}

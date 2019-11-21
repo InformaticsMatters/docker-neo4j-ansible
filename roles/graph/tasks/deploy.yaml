@@ -54,13 +54,6 @@
     definition: "{{ lookup('template', 'secrets.yaml.j2') }}"
   when: deployment_result.resources|length == 0
 
-# And service account...
-
-- name: Deploy service account
-  k8s:
-    definition: "{{ lookup('template', 'service-account.yaml.j2') }}"
-  when: deployment_result.resources|length == 0
-
 # Deploy the loader?
 # Only if the graph is not already deployed.
 
