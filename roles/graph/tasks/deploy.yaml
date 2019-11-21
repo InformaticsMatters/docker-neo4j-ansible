@@ -11,7 +11,7 @@
 # Check or create the namespace...
 
 - name: Get expected namespace
-  k8s_info:
+  k8s_facts:
     kind: Namespace
     name: "{{ graph_namespace }}"
   register: namespace_info
@@ -43,7 +43,7 @@
 # Deploy other objects
 
 - name: Check graph Deployment
-  k8s_info:
+  k8s_facts:
     kind: Deployment
     name: graph-pod
     namespace: "{{ graph_namespace }}"
