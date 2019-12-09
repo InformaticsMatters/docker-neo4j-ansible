@@ -6,11 +6,6 @@
 
 - block:
 
-  module_defaults:
-    group/k8s:
-      host: "{{ k8s_auth_host }}"
-      api_key: "{{ k8s_auth_api_key }}"
-
   - name: Remove application objects
     k8s:
       definition: "{{ lookup('template', item) }}"
@@ -30,3 +25,8 @@
       state: absent
       wait: yes
     when: graph_volume_size_g|int > 0
+
+  module_defaults:
+    group/k8s:
+      host: "{{ k8s_auth_host }}"
+      api_key: "{{ k8s_auth_api_key }}"

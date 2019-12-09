@@ -1,19 +1,14 @@
 ---
 
-- name: Check configuration
-  assert:
-    that:
-    - graph_core_request|int > 0
-    - graph_core_limit|int >= graph_core_request|int
-    - graph_password|string|length > 0
-    - graph_password|string != 'neo4j'
-
 - block:
 
-  module_defaults:
-    group/k8s:
-      host: "{{ k8s_auth_host }}"
-      api_key: "{{ k8s_auth_api_key }}"
+  - name: Check configuration
+    assert:
+      that:
+      - graph_core_request|int > 0
+      - graph_core_limit|int >= graph_core_request|int
+      - graph_password|string|length > 0
+      - graph_password|string != 'neo4j'
 
   # Check or create the namespace...
 
@@ -84,3 +79,9 @@
     loop:
     - http-service.yaml.j2
     - bolt-service.yaml.j2
+
+  module_defaults:
+    group/k8s:
+      host: "{{ k8s_auth_host }}"
+      api_key: "{{ k8s_auth_api_key }}"
+
