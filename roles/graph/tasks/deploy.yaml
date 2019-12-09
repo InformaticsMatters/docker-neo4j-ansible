@@ -8,72 +8,79 @@
     - graph_password|string|length > 0
     - graph_password|string != 'neo4j'
 
-# Check or create the namespace...
+- block:
 
-- name: Get expected namespace
-  k8s_facts:
-    kind: Namespace
-    name: "{{ graph_namespace }}"
-  register: namespace_info
+  module_defaults:
+    group/k8s:
+      host: "{{ k8s_auth_host }}"
+      api_key: "{{ k8s_auth_api_key }}"
 
-- name: Assert namespace exists
-  assert:
-    that: namespace_info.resources|length > 0
-    fail_msg: Namespace '{{ graph_namespace }}' does not exist
-  when: graph_volume_size_g|int == 0
+  # Check or create the namespace...
 
-- name: Create namespace
-  k8s:
-    definition: "{{ lookup('template', 'namespace.yaml.j2') }}"
-  when: graph_volume_size_g|int > 0
+  - name: Get expected namespace
+    k8s_facts:
+      kind: Namespace
+      name: "{{ graph_namespace }}"
+    register: namespace_info
 
-# Deploy volume claims
+  - name: Assert namespace exists
+    assert:
+      that: namespace_info.resources|length > 0
+      fail_msg: Namespace '{{ graph_namespace }}' does not exist
+    when: graph_volume_size_g|int == 0
 
-- name: Assert volume variables
-  assert:
-    that: graph_pvc_storage_class|length > 0
-  when: graph_volume_size_g|int > 0
+  - name: Create namespace
+    k8s:
+      definition: "{{ lookup('template', 'namespace.yaml.j2') }}"
+    when: graph_volume_size_g|int > 0
 
-- name: Deploy volume claim
-  k8s:
-    definition: "{{ lookup('template', 'graph-pvc.yaml.j2') }}"
-    wait: yes
-  when: graph_volume_size_g|int > 0
+  # Deploy volume claims
 
-# Deploy other objects
+  - name: Assert volume variables
+    assert:
+      that: graph_pvc_storage_class|length > 0
+    when: graph_volume_size_g|int > 0
 
-- name: Check graph Deployment
-  k8s_facts:
-    kind: Deployment
-    name: graph-pod
-    namespace: "{{ graph_namespace }}"
-  register: deployment_result
+  - name: Deploy volume claim
+    k8s:
+      definition: "{{ lookup('template', 'graph-pvc.yaml.j2') }}"
+      wait: yes
+    when: graph_volume_size_g|int > 0
 
-- name: Deploy secrets
-  k8s:
-    definition: "{{ lookup('template', 'secrets.yaml.j2') }}"
-  when: deployment_result.resources|length == 0
+  # Deploy other objects
 
-# Deploy the loader?
-# Only if the graph is not already deployed.
+  - name: Check graph Deployment
+    k8s_facts:
+      kind: Deployment
+      name: graph-pod
+      namespace: "{{ graph_namespace }}"
+    register: deployment_result
 
-- import_tasks: deploy-loader.yaml
-  when:
-  - graph_loader_deploy|bool
-  - deployment_result.resources|length == 0
+  - name: Deploy secrets
+    k8s:
+      definition: "{{ lookup('template', 'secrets.yaml.j2') }}"
+    when: deployment_result.resources|length == 0
 
-# Deploy the graph...
+  # Deploy the loader?
+  # Only if the graph is not already deployed.
 
-- name: Deploy Graph
-  k8s:
-    definition: "{{ lookup('template', 'graph-deployment.yaml.j2') }}"
-    wait: yes
-    wait_timeout: "{{ graph_pod_ready_timeout }}"
-  when: deployment_result.resources|length == 0
+  - import_tasks: deploy-loader.yaml
+    when:
+    - graph_loader_deploy|bool
+    - deployment_result.resources|length == 0
 
-- name: Deploy Graph Services
-  k8s:
-    definition: "{{ lookup('template', item) }}"
-  loop:
-  - http-service.yaml.j2
-  - bolt-service.yaml.j2
+  # Deploy the graph...
+
+  - name: Deploy Graph
+    k8s:
+      definition: "{{ lookup('template', 'graph-deployment.yaml.j2') }}"
+      wait: yes
+      wait_timeout: "{{ graph_pod_ready_timeout }}"
+    when: deployment_result.resources|length == 0
+
+  - name: Deploy Graph Services
+    k8s:
+      definition: "{{ lookup('template', item) }}"
+    loop:
+    - http-service.yaml.j2
+    - bolt-service.yaml.j2

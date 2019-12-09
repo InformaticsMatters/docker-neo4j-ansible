@@ -1,10 +1,5 @@
 ---
 
-- name: Remove pre-existing loader (Job)
-  k8s:
-    definition: "{{ lookup('template', 'loader-job.yaml.j2') }}"
-    state: absent
-
 # Read cypher script content...
 # These variables are used by the graph loader
 # where the content (if set) is written to the expected cypher script files.
@@ -19,10 +14,22 @@
     cypher_script_always_content: "{{ lookup('file',  graph_cypher_always_script) }}"
   when: graph_cypher_always_script|string|length > 0
 
-- name: Deploy Loader (Job)
-  k8s:
-    definition: "{{ lookup('template', 'loader-job.yaml.j2') }}"
-    wait: yes
-    wait_timeout: "{{ graph_loader_pod_ready_timeout }}"
-    wait_condition:
-      type: Complete
+- block:
+
+  module_defaults:
+    group/k8s:
+      host: "{{ k8s_auth_host }}"
+      api_key: "{{ k8s_auth_api_key }}"
+
+  - name: Remove pre-existing loader (Job)
+    k8s:
+      definition: "{{ lookup('template', 'loader-job.yaml.j2') }}"
+      state: absent
+
+  - name: Deploy Loader (Job)
+    k8s:
+      definition: "{{ lookup('template', 'loader-job.yaml.j2') }}"
+      wait: yes
+      wait_timeout: "{{ graph_loader_pod_ready_timeout }}"
+      wait_condition:
+        type: Complete
