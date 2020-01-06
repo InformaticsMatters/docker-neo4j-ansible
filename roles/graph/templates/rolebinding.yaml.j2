@@ -6,7 +6,7 @@ metadata:
   namespace: "{{ graph_namespace }}"
 roleRef:
   kind: Role
-  name: "{{ graph_sa_role }}"
+  name: im-psp-unrestricted
   apiGroup: rbac.authorization.k8s.io
 subjects:
 - kind: ServiceAccount
