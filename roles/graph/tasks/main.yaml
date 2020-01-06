@@ -35,9 +35,9 @@
 # Go...
 
 - include_tasks: deploy.yaml
-  when: graph_deploy|bool
+  when: graph_state|string == 'present'
 - include_tasks: undeploy.yaml
-  when: not graph_deploy|bool
+  when: graph_state|string == 'absent'
 
 # If it looks like we're deploying to OpenShift
 # we now need to logout...

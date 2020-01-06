@@ -1,7 +1,7 @@
 ---
 
-# Deploy (set to 'no' to un-deploy)
-graph_deploy: yes
+# Deploy (set to 'absent' to un-deploy)
+graph_state: present
 
 # The: -
 # - graph PVC name,
