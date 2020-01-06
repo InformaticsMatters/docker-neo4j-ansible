@@ -74,7 +74,7 @@
   # Deploy the graph...
 
   - name: Check secrets
-    k8s_info:
+    k8s_facts:
       kind: Secret
       api_version: v1
       namespace: "{{ infra_namespace }}"
