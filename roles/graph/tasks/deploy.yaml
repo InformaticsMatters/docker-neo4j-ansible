@@ -63,15 +63,7 @@
       namespace: "{{ graph_namespace }}"
     register: deployment_result
 
-  # Deploy the loader?
-  # Only if the graph is not already deployed.
-
-  - import_tasks: deploy-loader.yaml
-    when:
-    - graph_loader_deploy|bool
-    - deployment_result.resources|length == 0
-
-  # Deploy the graph...
+  # Deploy the graph secrets...
 
   - name: Check secrets
     k8s_facts:
@@ -103,6 +95,16 @@
     k8s:
       definition: "{{ lookup('template', 'secrets.yaml.j2') }}"
     when: graph_s_result.resources|length == 0
+
+  # Deploy the loader?
+  # Only if the graph is not already deployed.
+
+  - import_tasks: deploy-loader.yaml
+    when:
+    - graph_loader_deploy|bool
+    - deployment_result.resources|length == 0
+
+  # Deploy the graph...
 
   - name: Deploy Graph
     k8s:
