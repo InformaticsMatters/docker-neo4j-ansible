@@ -63,11 +63,6 @@
       namespace: "{{ graph_namespace }}"
     register: deployment_result
 
-  - name: Deploy secrets
-    k8s:
-      definition: "{{ lookup('template', 'secrets.yaml.j2') }}"
-    when: deployment_result.resources|length == 0
-
   # Deploy the loader?
   # Only if the graph is not already deployed.
 
@@ -77,6 +72,37 @@
     - deployment_result.resources|length == 0
 
   # Deploy the graph...
+
+  - name: Check secrets
+    k8s_info:
+      kind: Secret
+      api_version: v1
+      namespace: "{{ infra_namespace }}"
+      name: graph-secrets
+    register: graph_s_result
+
+  - name: Set secret facts
+    set_fact:
+      aws_access_key_id_fact: "{{ aws_access_key_id }}"
+      aws_secret_access_key_fact: "{{ aws_secret_access_key }}"
+      neo4j_auth_fact: "{{ graph_password }}"
+    when: graph_s_result.resources|length == 0
+
+  - name: Set secret facts (pre-deployed secrets)
+    set_fact:
+      aws_access_key_id_fact: "{{ graph_s_result.resources[0].data.aws_access_key_id|b64decode }}"
+      aws_secret_access_key_fact: "{{ graph_s_result.resources[0].data.aws_secret_access_key|b64decode }}"
+      neo4j_auth_fact: "{{ graph_s_result.resources[0].data.neo4j_auth|b64decode }}"
+    when: graph_s_result.resources|length == 1
+
+  - name: Display neo4j_auth fact
+    debug:
+      var: neo4j_auth_fact
+
+  - name: Deploy secrets
+    k8s:
+      definition: "{{ lookup('template', 'secrets.yaml.j2') }}"
+    when: graph_s_result.resources|length == 0
 
   - name: Deploy Graph
     k8s:
@@ -96,4 +122,3 @@
     group/k8s:
       host: "{{ k8s_auth_host }}"
       api_key: "{{ k8s_auth_api_key }}"
-
