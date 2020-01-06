@@ -29,6 +29,29 @@
       definition: "{{ lookup('template', 'namespace.yaml.j2') }}"
     when: graph_volume_size_g|int > 0
 
+  - name: Create Service Account
+    k8s:
+      definition: "{{ lookup('template', 'serviceaccount.yaml.j2') }}"
+
+  - block:
+
+    - name: Get Service Accont Role
+      k8s_facts:
+        kind: Role
+        api_version: rbac.authorization.k8s.io/v1beta1
+        name: "{{ graph_sa_role }}"
+      register: role_fact
+
+    - name: Check Service Accont Role
+      assert:
+        that: role_fact.resources|length == 1
+
+    - name: Bind Role to Service Account
+      k8s:
+        definition: "{{ lookup('template', 'rolebinding.yaml.j2') }}"
+
+    when: graph_sa_role|string|length > 0
+
   # Deploy volume claims
 
   - name: Assert volume variables

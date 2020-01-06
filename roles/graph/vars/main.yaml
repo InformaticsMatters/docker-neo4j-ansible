@@ -1,3 +1,8 @@
 ---
 
 graph_namespace: fragnet-graph
+
+# Service Account
+# And (if not-empty) the service-account role.
+graph_sa: graph
+graph_sa_role: im-unrestricted

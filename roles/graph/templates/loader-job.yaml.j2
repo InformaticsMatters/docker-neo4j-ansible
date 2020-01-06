@@ -7,8 +7,10 @@ metadata:
 spec:
   template:
     spec:
+      serviceAccountName: {{ graph_sa }}
       securityContext:
         fsGroup: 2000
+
       containers:
       - name: graph-loader
         image: {{ graph_loader_image }}:{{ graph_loader_tag }}

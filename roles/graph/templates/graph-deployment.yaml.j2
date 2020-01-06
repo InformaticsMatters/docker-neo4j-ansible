@@ -14,8 +14,10 @@ spec:
       labels:
         name: graph-pod
     spec:
+      serviceAccountName: {{ graph_sa }}
       securityContext:
         fsGroup: 2000
+
       containers:
       - name: graph-pod
         image: {{ graph_image }}:{{ graph_tag }}
