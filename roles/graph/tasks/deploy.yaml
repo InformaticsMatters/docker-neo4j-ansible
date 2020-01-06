@@ -39,7 +39,7 @@
     loop:
     - role
     - rolebinding
-    when: graph_sa_role|string|length > 0
+    when: graph_sa_psp|string|length > 0
 
   # Deploy volume claims
 
