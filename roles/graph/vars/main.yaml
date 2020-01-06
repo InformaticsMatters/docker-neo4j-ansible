@@ -1,6 +1,6 @@
 ---
 
-graph_namespace: fragnet-graph
+graph_namespace: graph
 
 # The 'purpose' label of preferred nodes
 graph_node_purpose: high-mem
