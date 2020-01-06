@@ -8,15 +8,18 @@
 
   - name: Remove application objects
     k8s:
-      definition: "{{ lookup('template', item) }}"
+      definition: "{{ lookup('template', '{{ item }}.yaml.j2') }}"
       state: absent
       wait: yes
     loop:
-    - secrets.yaml.j2
-    - loader-job.yaml.j2
-    - graph-deployment.yaml.j2
-    - http-service.yaml.j2
-    - bolt-service.yaml.j2
+    - secrets
+    - loader-job
+    - graph-deployment
+    - http-service
+    - bolt-service
+    - rolebinding
+    - role
+    - serviceaccount
     when: graph_volume_size_g|int == 0
 
   - name: Remove namespace

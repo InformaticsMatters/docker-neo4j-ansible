@@ -2,10 +2,10 @@
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
-  name: im-psp-unrestricted
+  name: graph-role
   namespace: "{{ graph_namespace }}"
 rules:
 - apiGroups: ['policy']
   resources: ['podsecuritypolicies']
   verbs: ['use']
-  resourceNames: ['{{ graph_sa_role }}']
+  resourceNames: ['{{ graph_sa_psp }}']

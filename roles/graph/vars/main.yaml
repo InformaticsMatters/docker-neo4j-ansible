@@ -2,7 +2,10 @@
 
 graph_namespace: fragnet-graph
 
+# The 'purpose' label of preferred nodes
+graph_node_purpose: high-mem
+
 # Service Account
-# And (if not-empty) the service-account role.
+# And (if not-empty) the service-account PSP name.
 graph_sa: graph
-graph_sa_role: im-unrestricted
+graph_sa_psp: im-unrestricted

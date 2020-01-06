@@ -11,6 +11,27 @@ spec:
       securityContext:
         fsGroup: 2000
 
+      # A 'preferred' (not guaranteed)
+      # node selection affinity...
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            preference:
+              matchExpressions:
+              - key: purpose
+                operator: In
+                values:
+                - {{ graph_node_purpose }}
+
+      # Node tolerations
+      # (tolerate high-mem nodes to allow us to run on them)
+      tolerations:
+      - key: purpose
+        operator: Equal
+        value: {{ graph_node_purpose }}
+        effect: "NoSchedule"
+
       containers:
       - name: graph-loader
         image: {{ graph_loader_image }}:{{ graph_loader_tag }}
