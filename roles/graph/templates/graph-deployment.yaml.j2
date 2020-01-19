@@ -41,7 +41,7 @@ spec:
 
       containers:
       - name: graph-pod
-        image: {{ graph_image }}:{{ graph_tag }}
+        image: "{{ graph_image }}:{{ graph_tag }}"
         imagePullPolicy: {{ graph_pull_policy }}
         ports:
         - containerPort: 7474
@@ -55,11 +55,11 @@ spec:
               name: graph-secrets
               key: neo4j_auth
         - name: NEO4J_dbms_memory_pagecache_size
-          value: {{ graph_pagecache_size_g }}G
+          value: "{{ graph_pagecache_size_g }}G"
         - name: NEO4J_dbms_memory_heap_initial__size
-          value: {{ graph_heap_g }}G
+          value: "{{ graph_heap_g }}G"
         - name: NEO4J_dbms_memory_heap_max__size
-          value: {{ graph_heap_g }}G
+          value: "{{ graph_heap_g }}G"
         - name: NEO4J_dbms_directories_data
           value: /data/data
         - name: NEO4J_dbms_directories_logs
@@ -83,10 +83,10 @@ spec:
         resources:
           limits:
             cpu: "{{ graph_core_limit }}"
-            memory: {{ graph_mem_request_g }}Gi
+            memory: "{{ graph_mem_request_g }}Gi"
           requests:
             cpu: "{{ graph_core_request }}"
-            memory: {{ graph_mem_request_g }}Gi
+            memory: "{{ graph_mem_request_g }}Gi"
         volumeMounts:
         - mountPath: /data
           name: graph-volume

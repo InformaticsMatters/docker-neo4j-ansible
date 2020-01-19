@@ -9,5 +9,5 @@ spec:
   - ReadWriteOnce
   resources:
     requests:
-      storage: {{ graph_volume_size_g }}Gi
+      storage: "{{ graph_volume_size_g }}Gi"
   storageClassName: "{{ graph_pvc_storage_class }}"
