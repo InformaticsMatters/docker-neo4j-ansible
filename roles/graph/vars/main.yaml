@@ -10,4 +10,4 @@ graph_node_purpose: bigmem
 # Service Account
 # And (if not-empty) the service-account PSP name.
 graph_sa: graph
-graph_sa_psp: im-unrestricted
+graph_sa_psp: im-core-unrestricted
