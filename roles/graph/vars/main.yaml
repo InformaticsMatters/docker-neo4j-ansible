@@ -3,7 +3,9 @@
 graph_namespace: graph
 
 # The 'purpose' label of preferred nodes
-graph_node_purpose: high-mem
+# and the name of any Taint that the node may have
+# in order to limit application deployments to specific nodes.
+graph_node_purpose: bigmem
 
 # Service Account
 # And (if not-empty) the service-account PSP name.
