@@ -2,12 +2,12 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: graph
+  name: graph-http
   namespace: {{ graph_namespace }}
 spec:
   selector:
-    name: graph-pod
+    name: graph
   ports:
-  - name: bolt
-    port: 7687
-    targetPort: 7687
+  - name: http
+    port: 7474
+    targetPort: 7474

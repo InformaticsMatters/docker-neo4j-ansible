@@ -1,18 +1,20 @@
 ---
-kind: Deployment
+kind: StatefulSet
 apiVersion: apps/v1
 metadata:
-  name: graph-pod
+  name: graph
   namespace: {{ graph_namespace }}
 spec:
-  replicas: 1
+  revisionHistoryLimit: 10
   selector:
     matchLabels:
-      name: graph-pod
+      name: graph
+  serviceName: graph
   template:
     metadata:
+      name: graph
       labels:
-        name: graph-pod
+        name: graph
     spec:
       serviceAccountName: {{ graph_sa }}
       securityContext:
@@ -40,7 +42,7 @@ spec:
         effect: "NoSchedule"
 
       containers:
-      - name: graph-pod
+      - name: graph
         image: "{{ graph_image }}:{{ graph_tag }}"
         imagePullPolicy: {{ graph_pull_policy }}
         ports:

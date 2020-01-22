@@ -18,12 +18,12 @@
 
   - name: Remove pre-existing loader (Job)
     k8s:
-      definition: "{{ lookup('template', 'loader-job.yaml.j2') }}"
+      definition: "{{ lookup('template', 'job-loader.yaml.j2') }}"
       state: absent
 
   - name: Deploy Loader (Job)
     k8s:
-      definition: "{{ lookup('template', 'loader-job.yaml.j2') }}"
+      definition: "{{ lookup('template', 'job-loader.yaml.j2') }}"
       wait: yes
       wait_timeout: "{{ graph_loader_pod_ready_timeout }}"
       wait_condition:

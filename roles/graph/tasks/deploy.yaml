@@ -50,18 +50,18 @@
 
   - name: Deploy volume claim
     k8s:
-      definition: "{{ lookup('template', 'graph-pvc.yaml.j2') }}"
+      definition: "{{ lookup('template', 'pvc-graph.yaml.j2') }}"
       wait: yes
     when: graph_volume_size_g|int > 0
 
   # Deploy other objects
 
-  - name: Check graph Deployment
+  - name: Check graph StatefulSet
     k8s_facts:
-      kind: Deployment
-      name: graph-pod
+      kind: StatefulSet
+      name: graph
       namespace: "{{ graph_namespace }}"
-    register: deployment_result
+    register: ss_result
 
   # Deploy the graph secrets...
 
@@ -102,23 +102,23 @@
   - import_tasks: deploy-loader.yaml
     when:
     - graph_loader_deploy|bool
-    - deployment_result.resources|length == 0
+    - ss_result.resources|length == 0
 
   # Deploy the graph...
 
   - name: Deploy Graph
     k8s:
-      definition: "{{ lookup('template', 'graph-deployment.yaml.j2') }}"
+      definition: "{{ lookup('template', 'statefulset-graph.yaml.j2') }}"
       wait: yes
       wait_timeout: "{{ graph_pod_ready_timeout }}"
-    when: deployment_result.resources|length == 0
+    when: ss_result.resources|length == 0
 
   - name: Deploy Graph Services
     k8s:
       definition: "{{ lookup('template', item) }}"
     loop:
-    - http-service.yaml.j2
-    - bolt-service.yaml.j2
+    - service-http.yaml.j2
+    - service-bolt.yaml.j2
 
   module_defaults:
     group/k8s:

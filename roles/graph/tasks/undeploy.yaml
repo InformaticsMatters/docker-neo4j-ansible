@@ -13,10 +13,10 @@
       wait: yes
     loop:
     - secrets
-    - loader-job
-    - graph-deployment
-    - http-service
-    - bolt-service
+    - job-loader
+    - statefulset-graph
+    - service-http
+    - service-bolt
     - rolebinding
     - role
     - serviceaccount
