@@ -4,32 +4,25 @@
 # (when the namespace and pvc are pre-provisioned)
 # or we just destroy the whole namespace (and the PVC we created).
 
-- block:
+- name: Remove application objects
+  k8s:
+    definition: "{{ lookup('template', '{{ item }}.yaml.j2') }}"
+    state: absent
+    wait: yes
+  loop:
+  - secrets
+  - job-loader
+  - statefulset-graph
+  - service-http
+  - service-bolt
+  - rolebinding
+  - role
+  - serviceaccount
+  when: graph_volume_size_g|int == 0
 
-  - name: Remove application objects
-    k8s:
-      definition: "{{ lookup('template', '{{ item }}.yaml.j2') }}"
-      state: absent
-      wait: yes
-    loop:
-    - secrets
-    - job-loader
-    - statefulset-graph
-    - service-http
-    - service-bolt
-    - rolebinding
-    - role
-    - serviceaccount
-    when: graph_volume_size_g|int == 0
-
-  - name: Remove namespace
-    k8s:
-      definition: "{{ lookup('template', 'namespace.yaml.j2') }}"
-      state: absent
-      wait: yes
-    when: graph_volume_size_g|int > 0
-
-  module_defaults:
-    group/k8s:
-      host: "{{ k8s_auth_host }}"
-      api_key: "{{ k8s_auth_api_key }}"
+- name: Remove namespace
+  k8s:
+    definition: "{{ lookup('template', 'namespace.yaml.j2') }}"
+    state: absent
+    wait: yes
+  when: graph_volume_size_g|int > 0

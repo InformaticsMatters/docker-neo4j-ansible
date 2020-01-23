@@ -1,126 +1,119 @@
 ---
 
-- block:
+- name: Check configuration
+  assert:
+    that:
+    - graph_core_request|int > 0
+    - graph_core_limit|int >= graph_core_request|int
+    - graph_password|string|length > 0
+    - graph_password|string != 'neo4j'
 
-  - name: Check configuration
-    assert:
-      that:
-      - graph_core_request|int > 0
-      - graph_core_limit|int >= graph_core_request|int
-      - graph_password|string|length > 0
-      - graph_password|string != 'neo4j'
+# Check or create the namespace...
 
-  # Check or create the namespace...
+- name: Get expected namespace
+  k8s_facts:
+    kind: Namespace
+    name: "{{ graph_namespace }}"
+  register: namespace_info
 
-  - name: Get expected namespace
-    k8s_facts:
-      kind: Namespace
-      name: "{{ graph_namespace }}"
-    register: namespace_info
+- name: Assert namespace exists
+  assert:
+    that: namespace_info.resources|length > 0
+    fail_msg: Namespace '{{ graph_namespace }}' does not exist
+  when: graph_volume_size_g|int == 0
 
-  - name: Assert namespace exists
-    assert:
-      that: namespace_info.resources|length > 0
-      fail_msg: Namespace '{{ graph_namespace }}' does not exist
-    when: graph_volume_size_g|int == 0
+- name: Create namespace
+  k8s:
+    definition: "{{ lookup('template', 'namespace.yaml.j2') }}"
+  when: graph_volume_size_g|int > 0
 
-  - name: Create namespace
-    k8s:
-      definition: "{{ lookup('template', 'namespace.yaml.j2') }}"
-    when: graph_volume_size_g|int > 0
+- name: Create Service Account
+  k8s:
+    definition: "{{ lookup('template', 'serviceaccount.yaml.j2') }}"
 
-  - name: Create Service Account
-    k8s:
-      definition: "{{ lookup('template', 'serviceaccount.yaml.j2') }}"
+- name: Bind Role to Service Account
+  k8s:
+    definition: "{{ lookup('template', '{{ item }}.yaml.j2') }}"
+  loop:
+  - role
+  - rolebinding
+  when: graph_sa_psp|string|length > 0
 
-  - name: Bind Role to Service Account
-    k8s:
-      definition: "{{ lookup('template', '{{ item }}.yaml.j2') }}"
-    loop:
-    - role
-    - rolebinding
-    when: graph_sa_psp|string|length > 0
+# Deploy volume claims
 
-  # Deploy volume claims
+- name: Assert volume variables
+  assert:
+    that: graph_pvc_storage_class|length > 0
+  when: graph_volume_size_g|int > 0
 
-  - name: Assert volume variables
-    assert:
-      that: graph_pvc_storage_class|length > 0
-    when: graph_volume_size_g|int > 0
+- name: Deploy volume claim
+  k8s:
+    definition: "{{ lookup('template', 'pvc-graph.yaml.j2') }}"
+    wait: yes
+  when: graph_volume_size_g|int > 0
 
-  - name: Deploy volume claim
-    k8s:
-      definition: "{{ lookup('template', 'pvc-graph.yaml.j2') }}"
-      wait: yes
-    when: graph_volume_size_g|int > 0
+# Deploy other objects
 
-  # Deploy other objects
+- name: Check graph StatefulSet
+  k8s_facts:
+    kind: StatefulSet
+    name: graph
+    namespace: "{{ graph_namespace }}"
+  register: ss_result
 
-  - name: Check graph StatefulSet
-    k8s_facts:
-      kind: StatefulSet
-      name: graph
-      namespace: "{{ graph_namespace }}"
-    register: ss_result
+# Deploy the graph secrets...
 
-  # Deploy the graph secrets...
+- name: Check secrets
+  k8s_facts:
+    kind: Secret
+    api_version: v1
+    namespace: "{{ graph_namespace }}"
+    name: graph-secrets
+  register: graph_s_result
 
-  - name: Check secrets
-    k8s_facts:
-      kind: Secret
-      api_version: v1
-      namespace: "{{ graph_namespace }}"
-      name: graph-secrets
-    register: graph_s_result
+- name: Set secret facts
+  set_fact:
+    aws_access_key_id_fact: "{{ aws_access_key_id }}"
+    aws_secret_access_key_fact: "{{ aws_secret_access_key }}"
+    neo4j_auth_fact: "neo4j/{{ graph_password }}"
+  when: graph_s_result.resources|length == 0
 
-  - name: Set secret facts
-    set_fact:
-      aws_access_key_id_fact: "{{ aws_access_key_id }}"
-      aws_secret_access_key_fact: "{{ aws_secret_access_key }}"
-      neo4j_auth_fact: "neo4j/{{ graph_password }}"
-    when: graph_s_result.resources|length == 0
+- name: Set secret facts (pre-deployed secrets)
+  set_fact:
+    aws_access_key_id_fact: "{{ graph_s_result.resources[0].data.aws_access_key_id|b64decode }}"
+    aws_secret_access_key_fact: "{{ graph_s_result.resources[0].data.aws_secret_access_key|b64decode }}"
+    neo4j_auth_fact: "{{ graph_s_result.resources[0].data.neo4j_auth|b64decode }}"
+  when: graph_s_result.resources|length == 1
 
-  - name: Set secret facts (pre-deployed secrets)
-    set_fact:
-      aws_access_key_id_fact: "{{ graph_s_result.resources[0].data.aws_access_key_id|b64decode }}"
-      aws_secret_access_key_fact: "{{ graph_s_result.resources[0].data.aws_secret_access_key|b64decode }}"
-      neo4j_auth_fact: "{{ graph_s_result.resources[0].data.neo4j_auth|b64decode }}"
-    when: graph_s_result.resources|length == 1
+- name: Display neo4j_auth fact
+  debug:
+    var: neo4j_auth_fact
 
-  - name: Display neo4j_auth fact
-    debug:
-      var: neo4j_auth_fact
+- name: Deploy secrets
+  k8s:
+    definition: "{{ lookup('template', 'secrets.yaml.j2') }}"
+  when: graph_s_result.resources|length == 0
 
-  - name: Deploy secrets
-    k8s:
-      definition: "{{ lookup('template', 'secrets.yaml.j2') }}"
-    when: graph_s_result.resources|length == 0
+# Deploy the loader?
+# Only if the graph is not already deployed.
 
-  # Deploy the loader?
-  # Only if the graph is not already deployed.
+- import_tasks: deploy-loader.yaml
+  when:
+  - graph_loader_deploy|bool
+  - ss_result.resources|length == 0
 
-  - import_tasks: deploy-loader.yaml
-    when:
-    - graph_loader_deploy|bool
-    - ss_result.resources|length == 0
+# Deploy the graph...
 
-  # Deploy the graph...
+- name: Deploy Graph
+  k8s:
+    definition: "{{ lookup('template', 'statefulset-graph.yaml.j2') }}"
+    wait: yes
+    wait_timeout: "{{ graph_pod_ready_timeout }}"
+  when: ss_result.resources|length == 0
 
-  - name: Deploy Graph
-    k8s:
-      definition: "{{ lookup('template', 'statefulset-graph.yaml.j2') }}"
-      wait: yes
-      wait_timeout: "{{ graph_pod_ready_timeout }}"
-    when: ss_result.resources|length == 0
-
-  - name: Deploy Graph Services
-    k8s:
-      definition: "{{ lookup('template', item) }}"
-    loop:
-    - service-http.yaml.j2
-    - service-bolt.yaml.j2
-
-  module_defaults:
-    group/k8s:
-      host: "{{ k8s_auth_host }}"
-      api_key: "{{ k8s_auth_api_key }}"
+- name: Deploy Graph Services
+  k8s:
+    definition: "{{ lookup('template', item) }}"
+  loop:
+  - service-http.yaml.j2
+  - service-bolt.yaml.j2

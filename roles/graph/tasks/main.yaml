@@ -1,18 +1,6 @@
 ---
 
-# Expose ansible version
-- debug:
-    var: ansible_version.full
-
-# The 'grand' play.
-# Install or remove the installation
-# based on whether the 'deploy' variable is yes or no...
-
-# Install essential modules
-- name: Install required modules
-  pip:
-    name: openshift==0.10.0
-    extra_args: --user
+- include_tasks: prep.yaml
 
 # If it looks like we're deploying to OpenShift
 # we need to use the k8s authentication module to login
@@ -34,10 +22,17 @@
 
 # Go...
 
-- include_tasks: deploy.yaml
-  when: graph_state|string == 'present'
-- include_tasks: undeploy.yaml
-  when: graph_state|string == 'absent'
+- block:
+
+  - include_tasks: deploy.yaml
+    when: graph_state|string == 'present'
+  - include_tasks: undeploy.yaml
+    when: graph_state|string == 'absent'
+
+  module_defaults:
+    group/k8s:
+      host: "{{ k8s_auth_host }}"
+      api_key: "{{ k8s_auth_api_key }}"
 
 # If it looks like we're deploying to OpenShift
 # we now need to logout...
