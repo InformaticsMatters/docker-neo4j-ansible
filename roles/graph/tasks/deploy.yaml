@@ -85,10 +85,6 @@
     neo4j_auth_fact: "{{ graph_s_result.resources[0].data.neo4j_auth|b64decode }}"
   when: graph_s_result.resources|length == 1
 
-- name: Display neo4j_auth fact
-  debug:
-    var: neo4j_auth_fact
-
 - name: Deploy secrets
   k8s:
     definition: "{{ lookup('template', 'secrets.yaml.j2') }}"
