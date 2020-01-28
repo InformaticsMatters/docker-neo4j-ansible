@@ -1,7 +1,7 @@
-# docker-neo4j-ansible
+# Docker neo4j (Ansible)
 
 [![Build Status](https://travis-ci.com/InformaticsMatters/docker-neo4j-ansible.svg?branch=master)](https://travis-ci.com/InformaticsMatters/docker-neo4j-ansible)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/informaticsmatters/docker-neo4j-ansible)
+![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/informaticsmatters/docker-neo4j-ansible)
 
 Ansible Playbooks (and Roles) for the docker-neo4j project.
 
