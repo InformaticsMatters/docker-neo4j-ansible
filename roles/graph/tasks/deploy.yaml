@@ -52,15 +52,6 @@
     wait: yes
   when: graph_volume_size_g|int > 0
 
-# Deploy other objects
-
-- name: Check graph StatefulSet
-  k8s_facts:
-    kind: StatefulSet
-    name: graph
-    namespace: "{{ graph_namespace }}"
-  register: ss_result
-
 # Deploy the graph secrets...
 
 - name: Check secrets
@@ -90,22 +81,28 @@
     definition: "{{ lookup('template', 'secrets.yaml.j2') }}"
   when: graph_s_result.resources|length == 0
 
-# Deploy the loader?
-# Only if the graph is not already deployed.
-
-- import_tasks: deploy-loader.yaml
-  when:
-  - graph_loader_deploy|bool
-  - ss_result.resources|length == 0
-
 # Deploy the graph...
+#
+# Which consists of checking for cypher script content in our 'files' directory
+# and setting corresponding variables. The Graph is deployed with an
+# initContainer that populates the graph loader directory before the Graph
+# (neo4j) container starts.
+
+- name: Set 'once' cypher script content
+  set_fact:
+    cypher_script_once_content: "{{ lookup('file',  graph_cypher_once_script) }}"
+  when: graph_cypher_once_script|string|length > 0
+
+- name: Set 'always' cypher script content
+  set_fact:
+    cypher_script_always_content: "{{ lookup('file',  graph_cypher_always_script) }}"
+  when: graph_cypher_always_script|string|length > 0
 
 - name: Deploy Graph
   k8s:
-    definition: "{{ lookup('template', 'statefulset-graph.yaml.j2') }}"
+    definition: "{{ lookup('template', 'statefulset.yaml.j2') }}"
     wait: yes
     wait_timeout: "{{ graph_pod_ready_timeout }}"
-  when: ss_result.resources|length == 0
 
 - name: Deploy Graph Services
   k8s:

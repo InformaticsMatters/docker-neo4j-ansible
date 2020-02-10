@@ -5,6 +5,9 @@ yaml-files:
 - '*.yml'
 - '.yamllint'
 
+ignore: |
+  roles/graph/templates/statefulset.yaml.j2
+
 rules:
   indentation:
     spaces: 2
