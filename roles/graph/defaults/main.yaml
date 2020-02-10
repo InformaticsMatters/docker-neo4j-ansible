@@ -26,10 +26,10 @@ graph_pvc_storage_class: local-disk1
 # It's on an S3 bucket and a path...
 graph_bucket: im-fragnet
 graph_bucket_path: build/vendor/toxcast/2019-10-24/build-1
-# Set to 'yes' (the string, not the YAML boolean)
-# to wipe the graph data directory prior to the sync.
-# This value is passed to the graph loader's container.
-graph_wipe: 'yes'
+# Yes to wipe the graph data directory prior to the sync.
+# The state of this value is used to pass either "Yes" or "no"
+# to the loader container's GRAPH_WIPE variable.
+graph_wipe: yes
 # Path to cypher scripts.
 # Default content can be found in files directory.
 # Set to an empty string to skip.

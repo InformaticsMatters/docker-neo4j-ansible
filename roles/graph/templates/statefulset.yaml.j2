@@ -66,7 +66,11 @@ spec:
         - name: SYNC_PATH
           value: data-loader
         - name: GRAPH_WIPE
-          value: "{{ graph_wipe }}"
+{% if graph_wipe %}
+          value: "yes"
+{% else %}
+          value: "no"
+{% endif %}
         - name: CYPHER_ROOT
           value: /data
         - name: CYPHER_ONCE_CONTENT
