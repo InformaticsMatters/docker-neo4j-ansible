@@ -11,8 +11,7 @@
     wait: yes
   loop:
   - secrets
-  - job-loader
-  - statefulset-graph
+  - statefulset
   - service-http
   - service-bolt
   - rolebinding

@@ -41,6 +41,53 @@ spec:
         value: {{ graph_node_purpose }}
         effect: "NoSchedule"
 
+      # The initContainers stage simply invokes the loader image
+      # which is responsible for synchronising the chosen S3 graph
+      # data with the container's 'loader' directory.
+      initContainers:
+      - name: graph-loader
+        image: "{{ graph_loader_image }}:{{ graph_loader_tag }}"
+        imagePullPolicy: {{ graph_pull_policy }}
+        env:
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: graph-secrets
+              key: aws_access_key_id
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: graph-secrets
+              key: aws_secret_access_key
+        - name: AWS_BUCKET
+          value: {{ graph_bucket }}
+        - name: AWS_BUCKET_PATH
+          value: {{ graph_bucket_path }}
+        - name: SYNC_PATH
+          value: data-loader
+        - name: GRAPH_WIPE
+          value: "{{ graph_wipe }}"
+        - name: CYPHER_ROOT
+          value: /data
+        - name: CYPHER_ONCE_CONTENT
+          value: "{{ cypher_script_once_content|default('', true) }}"
+        - name: CYPHER_ALWAYS_CONTENT
+          value: "{{ cypher_script_always_content|default('', true) }}"
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 1Gi
+          requests:
+            cpu: 1000m
+            memory: 1Gi
+        volumeMounts:
+        - mountPath: /data
+          name: graph-volume
+      volumes:
+      - name: graph-volume
+        persistentVolumeClaim:
+          claimName: {{ graph_pvc }}
+
       containers:
       - name: graph
         image: "{{ graph_image }}:{{ graph_tag }}"
