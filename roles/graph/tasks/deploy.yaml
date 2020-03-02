@@ -11,7 +11,7 @@
 # Check or create the namespace...
 
 - name: Get expected namespace
-  k8s_facts:
+  k8s_info:
     kind: Namespace
     name: "{{ graph_namespace }}"
   register: namespace_info
@@ -55,7 +55,7 @@
 # Deploy the graph secrets...
 
 - name: Check secrets
-  k8s_facts:
+  k8s_info:
     kind: Secret
     api_version: v1
     namespace: "{{ graph_namespace }}"
