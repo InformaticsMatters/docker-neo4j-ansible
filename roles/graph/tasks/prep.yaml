@@ -13,8 +13,9 @@
 # Install essential modules
 - name: Install required modules
   pip:
-    name: openshift==0.10.0
-    extra_args: --user --no-deps
+    name:
+    - kubernetes==10.0.1
+    extra_args: --user
 
 # Kubernetes credentials ------------------------------------------------------
 
