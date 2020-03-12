@@ -15,6 +15,7 @@
   pip:
     name:
     - kubernetes==10.0.1
+    - openshift==0.10.0
     extra_args: --user
 
 # Kubernetes credentials ------------------------------------------------------
