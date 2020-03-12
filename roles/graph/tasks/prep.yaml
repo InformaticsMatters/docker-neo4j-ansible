@@ -14,7 +14,6 @@
 - name: Install required modules
   pip:
     name: openshift==0.10.0
-    extra_args: --user
 
 # Kubernetes credentials ------------------------------------------------------
 
