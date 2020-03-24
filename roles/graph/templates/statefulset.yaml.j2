@@ -59,6 +59,8 @@ spec:
             secretKeyRef:
               name: graph-secrets
               key: aws_secret_access_key
+        - name: AWS_DEFAULT_REGION
+          value: {{ aws_default_region }}
         - name: AWS_BUCKET
           value: {{ graph_bucket }}
         - name: AWS_BUCKET_PATH

@@ -66,3 +66,4 @@ graph_pod_ready_timeout: 300
 
 aws_access_key_id: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
 aws_secret_access_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
+aws_default_region: eu-central-1
