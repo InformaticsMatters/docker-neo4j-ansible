@@ -48,6 +48,7 @@ spec:
       - name: graph-loader
         image: "{{ graph_loader_image }}:{{ graph_loader_tag }}"
         imagePullPolicy: {{ graph_pull_policy }}
+        terminationMessagePolicy: FallbackToLogsOnError
         env:
         - name: AWS_ACCESS_KEY_ID
           valueFrom:
