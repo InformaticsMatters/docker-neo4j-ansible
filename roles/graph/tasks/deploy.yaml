@@ -52,6 +52,26 @@
     wait: yes
   when: graph_volume_size_g|int > 0
 
+# Best practice ... wait for the PVC to bind.
+# e.g. wait until resources[0].status.phase == Bound (initially Pending)
+
+- name: Wait for volume claim to bind
+  k8s_info:
+    kind: PersistentVolumeClaim
+    name: "{{ graph_pvc }}"
+    namespace: "{{ graph_namespace }}"
+  register: pvc_result
+  until: >-
+    pvc_result.resources|length > 0
+    and pvc_result.resources[0].status is defined
+    and pvc_result.resources[0].status.phase is defined
+    and pvc_result.resources[0].status.phase == 'Bound'
+  delay: 5
+  retries: "{{ (bind_timeout|int / 5)|int }}"
+  when:
+  - graph_volume_size_g|int > 0
+  - wait_for_bind|bool
+
 # Deploy the graph secrets...
 
 - name: Check secrets
