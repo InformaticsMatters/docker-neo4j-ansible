@@ -113,11 +113,6 @@
   - graph_volume_size_g|int > 0
   - wait_for_bind|bool
 
-- name: Sleep for 90 seconds and continue with play
-  wait_for:
-    timeout: 90
-  delegate_to: localhost
-
 # Deploy the graph...
 #
 # Which consists of checking for cypher script content in our 'files' directory
