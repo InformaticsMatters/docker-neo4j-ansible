@@ -10,7 +10,7 @@
 
 # Check or create the namespace...
 
-- name: Get expected namespace
+- name: Get expected namespace ({{ graph_namespace }})
   k8s_info:
     kind: Namespace
     name: "{{ graph_namespace }}"
