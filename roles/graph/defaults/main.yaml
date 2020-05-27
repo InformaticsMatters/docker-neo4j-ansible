@@ -3,20 +3,6 @@
 # Deploy (set to 'absent' to un-deploy)
 graph_state: present
 
-# Wait for graph?
-# If set the play waits until the graph is fully deployed
-# (i.e. a service is available at the expected port)
-# CAUTION: for large graphs this can take a substantial
-#          period of time (i.e. a number of hours).
-#          If you enable this make sure your
-#          graph ready timeout is appropriate.
-#
-# The playbook always waits for the graph loader
-# (the initialisation container that loads the graph data)
-# but waiting for the graph is optional.
-graph_wait_until_available: no
-graph_available_timeout_minutes: 30
-
 # The: -
 # - graph PVC name,
 #   which is either pre-previsioned or self-provisioned (see below)

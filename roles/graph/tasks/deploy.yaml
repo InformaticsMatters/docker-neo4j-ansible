@@ -8,12 +8,6 @@
     - graph_password|string|length > 0
     - graph_password|string != 'neo4j'
 
-- name: Check wait configuration
-  assert:
-    that:
-    - graph_available_timeout_minutes|int > 0
-  when: graph_wait_until_available|bool
-
 # Check or create the namespace...
 
 - name: Get expected namespace ({{ graph_namespace }})
