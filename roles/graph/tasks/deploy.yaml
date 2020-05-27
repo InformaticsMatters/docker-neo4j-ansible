@@ -147,19 +147,27 @@
 # run - it downloads graph data from (typically) AWS S3
 # before the Pod switches to the main graph container.
 
-- name: Wait for graph-loader to complete
+- name: Wait for graph-loader to terminate
   k8s_info:
     kind: Pod
     name: graph-0
     namespace: "{{ graph_namespace }}"
-  register: g_result
-#  until: >-
-#    g_result.resources|length == 1
-#    and g_result.resources[0].status.containerStatuses|length > 1
-#    and g_result.resources[0].status.containerStatuses[0].ready
-#  delay: 20
-#  retries: "{{ (graph_loader_pod_ready_timeout_minutes|int * 60 / 20)|int }}"
+  register: g_info
+  until: >-
+    g_info.resources|length == 1
+    and g_info.resources[0].status.initContainerStatuses is defined
+    and g_info.resources[0].status.initContainerStatuses|length == 1
+    and g_info.resources[0].status.initContainerStatuses[0].state is defined
+    and g_info.resources[0].status.initContainerStatuses[0].state.terminated is defined
+  delay: 20
+  retries: "{{ (graph_loader_pod_ready_timeout_minutes|int * 60 / 20)|int }}"
 
 - name: Debug
   debug:
-    var: g_result
+    var: g_info
+
+- name: Assert graph-loader exitCode
+  assert:
+    that:
+    - g_info.resources[0].status.initContainerStatuses[0].state.terminated.exitCode is defined
+    - g_info.resources[0].status.initContainerStatuses[0].state.terminated.exitCode == 0
