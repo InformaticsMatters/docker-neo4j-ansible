@@ -153,12 +153,12 @@
     name: graph-0
     namespace: "{{ graph_namespace }}"
   register: g_result
-  until: >-
-    g_result.resources|length == 1
-    and g_result.resources[0].status.containerStatuses|length > 1
-    and g_result.resources[0].status.containerStatuses[0].ready
-  delay: 20
-  retries: "{{ (graph_loader_pod_ready_timeout_minutes|int * 60 / 20)|int }}"
+#  until: >-
+#    g_result.resources|length == 1
+#    and g_result.resources[0].status.containerStatuses|length > 1
+#    and g_result.resources[0].status.containerStatuses[0].ready
+#  delay: 20
+#  retries: "{{ (graph_loader_pod_ready_timeout_minutes|int * 60 / 20)|int }}"
 
 - name: Debug
   debug:
