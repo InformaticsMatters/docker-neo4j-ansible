@@ -8,6 +8,12 @@
     - graph_password|string|length > 0
     - graph_password|string != 'neo4j'
 
+- name: Check wait configuration
+  assert:
+    that:
+    - graph_available_timeout_minutes|int > 0
+  when: graph_wait_until_available|bool
+
 # Check or create the namespace...
 
 - name: Get expected namespace ({{ graph_namespace }})
@@ -120,15 +126,40 @@
 # initContainer that populates the graph loader directory before the Graph
 # (neo4j) container starts.
 
+- name: Deploy Graph services
+  k8s:
+    definition: "{{ lookup('template', '{{ item }}.yaml.j2') }}"
+    wait: yes
+  loop:
+  - service-http
+  - service-bolt
+
 - name: Deploy Graph
   k8s:
-    definition: "{{ lookup('template', 'statefulset.yaml.j2') }}"
+    definition: "{{ lookup('template', '{{ item }}.yaml.j2') }}"
     wait: yes
     wait_timeout: "{{ graph_pod_ready_timeout }}"
-
-- name: Deploy Graph Services
-  k8s:
-    definition: "{{ lookup('template', item) }}"
   loop:
-  - service-http.yaml.j2
-  - service-bolt.yaml.j2
+  - statefulset
+
+# Wait for loader
+# This (initialisation container) can take some time to
+# run - it downloads graph data from (typically) AWS S3
+# before the Pod switches to the main graph container.
+
+- name: Wait for graph-loader to complete
+  k8s_info:
+    kind: Pod
+    name: graph-0
+    namespace: "{{ graph_namespace }}"
+  register: g_result
+  until: >-
+    g_result.resources|length == 1
+    and g_result.resources[0].status.containerStatuses|length > 1
+    and g_result.resources[0].status.containerStatuses[0].ready
+  delay: 20
+  retries: "{{ (graph_loader_pod_ready_timeout_minutes|int * 60 / 20)|int }}"
+
+- name: Debug
+  debug:
+    var: g_result
