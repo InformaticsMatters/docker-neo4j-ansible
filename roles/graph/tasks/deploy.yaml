@@ -142,10 +142,11 @@
   loop:
   - statefulset
 
-# Wait for loader
-# This (initialisation container) can take some time to
+# Wait for graph-loader (always)
+#
+# This (initialisation) container can take some time to
 # run - it downloads graph data from (typically) AWS S3
-# before the Pod switches to the main graph container.
+# before the Pod switches to the main container.
 
 - name: Wait for graph-loader to terminate
   k8s_info:
@@ -161,10 +162,6 @@
     and g_info.resources[0].status.initContainerStatuses[0].state.terminated is defined
   delay: 20
   retries: "{{ (graph_loader_pod_ready_timeout_minutes|int * 60 / 20)|int }}"
-
-- name: Debug
-  debug:
-    var: g_info
 
 - name: Assert graph-loader exitCode
   assert:
