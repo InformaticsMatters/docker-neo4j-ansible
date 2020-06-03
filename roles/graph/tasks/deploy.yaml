@@ -142,7 +142,7 @@
 # run - it downloads graph data from (typically) AWS S3
 # before the Pod switches to the main container.
 
-- name: Wait for graph-loader to terminate
+- name: Wait for graph-loader to terminate ({{ graph_loader_pod_ready_timeout_minutes }} minutes)
   k8s_info:
     kind: Pod
     name: graph-0
@@ -154,8 +154,8 @@
     and g_info.resources[0].status.initContainerStatuses|length == 1
     and g_info.resources[0].status.initContainerStatuses[0].state is defined
     and g_info.resources[0].status.initContainerStatuses[0].state.terminated is defined
-  delay: 20
-  retries: "{{ (graph_loader_pod_ready_timeout_minutes|int * 60 / 20)|int }}"
+  delay: 60
+  retries: "{{ (graph_loader_pod_ready_timeout_minutes|int * 60 / 60)|int }}"
 
 - name: Assert graph-loader exitCode
   assert:

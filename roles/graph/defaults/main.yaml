@@ -55,7 +55,11 @@ graph_core_request: 4
 graph_core_limit: 16
 
 # Timeout for loader and graph pods...
-graph_loader_pod_ready_timeout_minutes: 30
+#
+# Be prepared for a long wait for large graphs.
+# It can take around 40 minutes for 25Gi of data
+# to arrive in the input directory.
+graph_loader_pod_ready_timeout_minutes: 55
 graph_pod_ready_timeout: 300
 
 #------------------------------------------------------------------------------
