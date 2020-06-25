@@ -77,9 +77,9 @@ spec:
         - name: CYPHER_ROOT
           value: /data
         - name: CYPHER_ONCE_CONTENT
-          value: "{{ cypher_script_once_content|default('', true) }}"
+          value: "{{ graph_cypher_script_once_content|default('', true) }}"
         - name: CYPHER_ALWAYS_CONTENT
-          value: "{{ cypher_script_always_content|default('', true) }}"
+          value: "{{ graph_cypher_script_always_content|default('', true) }}"
         resources:
           limits:
             cpu: 1000m
