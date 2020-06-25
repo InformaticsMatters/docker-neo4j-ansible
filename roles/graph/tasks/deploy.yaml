@@ -72,27 +72,27 @@
 
 - name: Check 'once' script or content
   assert:
-    that: graph_cypher_once_script|string|length == 0
+    that: graph_cypher_script_once|string|length == 0
   when:
   - graph_cypher_script_once_content is defined
   - graph_cypher_script_once_content|string|length > 0
 
 - name: Set 'once' cypher script content
   set_fact:
-    graph_cypher_script_once_content: "{{ lookup('file',  graph_cypher_once_script) }}"
-  when: graph_cypher_once_script|string|length > 0
+    graph_cypher_script_once_content: "{{ lookup('file', graph_cypher_script_once) }}"
+  when: graph_cypher_script_once|string|length > 0
 
 - name: Check 'always' script or content
   assert:
-    that: graph_cypher_always_script|string|length == 0
+    that: graph_cypher_script_always|string|length == 0
   when:
   - graph_cypher_script_always_content is defined
   - graph_cypher_script_always_content|string|length > 0
 
 - name: Set 'always' cypher script content
   set_fact:
-    graph_cypher_script_always_content: "{{ lookup('file',  graph_cypher_always_script) }}"
-  when: graph_cypher_always_script|string|length > 0
+    graph_cypher_script_always_content: "{{ lookup('file', graph_cypher_script_always) }}"
+  when: graph_cypher_script_always|string|length > 0
 
 # Deploy volume claims
 

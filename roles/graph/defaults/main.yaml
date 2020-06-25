@@ -40,12 +40,12 @@ graph_wipe: yes
 # setting the corresponding script to ''.
 #
 # For example, if you want to run 'CALL apoc.warmup.run(false, false, true);'
-# every time the Graph starts (ile. to load the cache and prime the indexes)
-# set the value of 'graph_cypher_always_script_content' to
+# every time the Graph starts (i.e. to load the cache and prime the indexes)
+# set the value of 'graph_cypher_script_always_content' to
 # 'CALL apoc.warmup.run(false, false, true);' and then
-# set 'graph_cypher_always_script' to ''.
-graph_cypher_once_script: cypher-script.once
-graph_cypher_always_script: cypher-script.always
+# set 'graph_cypher_script_always' to ''.
+graph_cypher_script_once: cypher-script.once
+graph_cypher_script_always: cypher-script.always
 
 # Container images.
 # There's an S3 'loader' and a 'graph'
