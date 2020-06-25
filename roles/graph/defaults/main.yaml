@@ -30,9 +30,20 @@ graph_bucket_path: build/vendor/toxcast/2019-10-24/build-1
 # The state of this value is used to pass either "Yes" or "no"
 # to the loader container's GRAPH_WIPE variable.
 graph_wipe: yes
-# Path to cypher scripts.
+
+# Path to built-in cypher scripts (in 'files').
 # Default content can be found in files directory.
 # Set to an empty string to skip.
+#
+# Alternatively, if the built-in scripts are not suitable,
+# the user can specify their own content using '*_content' variables while
+# setting the corresponding script to ''.
+#
+# For example, if you want to run 'CALL apoc.warmup.run(false, false, true);'
+# every time the Graph starts (ile. to load the cache and prime the indexes)
+# set the value of 'graph_cypher_always_script_content' to
+# 'CALL apoc.warmup.run(false, false, true);' and then
+# set 'graph_cypher_always_script' to ''.
 graph_cypher_once_script: cypher-script.once
 graph_cypher_always_script: cypher-script.always
 
