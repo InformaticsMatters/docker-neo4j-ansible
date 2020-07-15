@@ -49,8 +49,8 @@ graph_cypher_script_always: cypher-script.always
 
 # Container images.
 # There's an S3 'loader' and a 'graph'
+# and they share the same tag.
 graph_loader_image: informaticsmatters/neo4j-s3-loader
-graph_loader_tag: '3.5.19'
 graph_image: informaticsmatters/neo4j
 graph_tag: '3.5.19'
 graph_pull_policy: IfNotPresent

@@ -46,7 +46,7 @@ spec:
       # data with the container's 'loader' directory.
       initContainers:
       - name: graph-loader
-        image: "{{ graph_loader_image }}:{{ graph_loader_tag }}"
+        image: "{{ graph_loader_image }}:{{ graph_tag }}"
         imagePullPolicy: {{ graph_pull_policy }}
         terminationMessagePolicy: FallbackToLogsOnError
         env:
