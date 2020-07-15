@@ -1,5 +1,5 @@
 # The ansible that's expected in our AWX installation.
 # Run the playbook with this and there's more chance it'll work
 # when run from within our AWX instance.
-ansible == 2.9.9
+ansible == 2.9.10
 openshift == 0.10.1
