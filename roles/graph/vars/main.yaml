@@ -7,6 +7,11 @@ graph_namespace: graph
 # in order to limit application deployments to specific nodes.
 graph_node_purpose: bigmem
 
+# Use the 'Enterprise Edition' container image?
+# You should not set this unless you have a licence from neo4j to run it.
+# Setting this to 'yes' adds the '-enterprise' suffix to {{ graph_tag }}.
+graph_use_enterprise_edition: no
+
 # Service Account
 # And (if not-empty) the service-account PSP name.
 graph_sa: graph
