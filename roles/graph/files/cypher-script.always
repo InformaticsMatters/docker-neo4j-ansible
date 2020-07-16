@@ -1,1 +1,3 @@
-CALL apoc.warmup.run(true, true, true);
+CALL apoc.monitor.ids();
+CALL apoc.monitor.store();
+CALL apoc.warmup.run(false, false, true);
