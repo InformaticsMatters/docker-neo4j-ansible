@@ -72,7 +72,7 @@ graph_loader_deploy: yes
 # You must use all public images or you must use all private images.
 # You cannot put some images into a private repo and rely on
 # public images for the rest - it's "all or none".
-graph_preset_pullsecret_name: ''
+all_image_preset_pullsecret_name: ''
 
 # Graph image memory sizing...
 graph_pagecache_size_g: 32

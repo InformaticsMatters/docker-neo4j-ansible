@@ -41,9 +41,9 @@ spec:
         value: {{ graph_node_purpose }}
         effect: "NoSchedule"
 
-{% if graph_preset_pullsecret_name|string|length > 0 %}
+{% if all_image_preset_pullsecret_name|string|length > 0 %}
       imagePullSecrets:
-      - name: {{ graph_preset_pullsecret_name }}
+      - name: {{ all_image_preset_pullsecret_name }}
 {% endif %}
 
       # The initContainers stage simply invokes the loader image

@@ -57,6 +57,6 @@ You will need to provide your own value for `graph_image_registry`
 and then the name of your pull-secret.
 
 For more detailed information refer to the documentation for the
-`graph_preset_pullsecret_name` variable in `roles/graph/defaults/main.yaml`.
+`all_image_preset_pullsecret_name` variable in `roles/graph/defaults/main.yaml`.
 
 ---
