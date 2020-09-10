@@ -48,4 +48,15 @@ With credentials set you should be able to run the main playbook: -
     When run from AWX (Ansible Tower) a 'real' inventory will be provided
     and `ansible.cfg` and `inventory.yaml` become unnecessary.
 
+## Using private registries
+If you've moved the graph and loader images to your own private registry
+then you may need to provide a pull-secret for them. A variable is available
+to define the image pull-secret name.
+
+You will need to provide your own value for `graph_image_registry`
+and then the name of your pull-secret.
+
+For more detailed information refer to the documentation for the
+`graph_preset_pullsecret_name` variable in `roles/graph/defaults/main.yaml`.
+
 ---

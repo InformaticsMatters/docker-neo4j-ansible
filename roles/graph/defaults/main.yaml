@@ -50,11 +50,29 @@ graph_cypher_script_always: cypher-script.always
 # Container images.
 # There's an S3 'loader' and a 'graph'
 # and they share the same tag.
+graph_image_registry: docker.io
 graph_loader_image: informaticsmatters/neo4j-s3-loader
 graph_image: informaticsmatters/neo4j
 graph_tag: '3.5.19'
 graph_pull_policy: IfNotPresent
 graph_loader_deploy: yes
+
+# Providing your own Kubernetes image pull secrets.
+#
+# If you have moved our public images to
+# your own private binary repository like JFrog Artifactory
+# you probably need to provide a pull secret for them.
+# One pull secret must valid for all images.
+#
+#   - Create the application namespaces in advance of the playbooks
+#   - Create the pull secret in each namespace
+#   - Provide the name of the secret in the following variable
+#     (which will be used for all images)
+#
+# You must use all public images or you must use all private images.
+# You cannot put some images into a private repo and rely on
+# public images for the rest - it's "all or none".
+graph_preset_pullsecret_name: ''
 
 # Graph image memory sizing...
 graph_pagecache_size_g: 32

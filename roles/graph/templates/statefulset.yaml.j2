@@ -41,12 +41,17 @@ spec:
         value: {{ graph_node_purpose }}
         effect: "NoSchedule"
 
+{% if graph_preset_pullsecret_name|string|length > 0 %}
+      imagePullSecrets:
+      - name: {{ graph_preset_pullsecret_name }}
+{% endif %}
+
       # The initContainers stage simply invokes the loader image
       # which is responsible for synchronising the chosen S3 graph
       # data with the container's 'loader' directory.
       initContainers:
       - name: graph-loader
-        image: "{{ graph_loader_image }}:{{ graph_tag }}"
+        image: "{{ graph_image_registry }}/{{ graph_loader_image }}:{{ graph_tag }}"
         imagePullPolicy: {{ graph_pull_policy }}
         terminationMessagePolicy: FallbackToLogsOnError
         env:
@@ -98,9 +103,9 @@ spec:
       containers:
       - name: graph
 {% if graph_use_enterprise_edition %}
-        image: "{{ graph_image }}:{{ graph_tag }}-enterprise"
+        image: "{{ graph_image_registry }}/{{ graph_image }}:{{ graph_tag }}-enterprise"
 {% else %}
-        image: "{{ graph_image }}:{{ graph_tag }}"
+        image: "{{ graph_image_registry }}/{{ graph_image }}:{{ graph_tag }}"
 {% endif %}
         imagePullPolicy: {{ graph_pull_policy }}
         ports:
