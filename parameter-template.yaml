@@ -1,0 +1,20 @@
+---
+
+# A typical set of core variables you might want to set.
+# Change the values to satisfy your graph and cluster.
+
+all_image_preset_pullsecret_name: ''
+
+graph_image_registry: docker.io
+graph_loader_image: informaticsmatters/neo4j-s3-loader
+graph_image: informaticsmatters/neo4j
+graph_tag: '3.5.20-1'
+
+graph_volume_size_g: 800
+graph_pvc_storage_class: gp2
+graph_bucket: im-fragnet
+graph_bucket_path: combination/3
+graph_wipe: no
+
+graph_pagecache_size_g: 80
+graph_mem_request_g: 96
