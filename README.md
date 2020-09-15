@@ -33,15 +33,20 @@ and an `API_KEY`: -
 >   The host and API key typically come from the kube config file,
     the API coming from the user token.
 
-You'll also need AWS credentials to access the graph data (expected in
-an S3 bucket): -
+You'll also need AWS credentials to allow the graph loader container,
+part of the graph deployment, to access the graph data. The credentials
+must give you permission to execute `s3:Get*` and `s3:List*`
+actions in your chosen graph bucket and path: -
 
     $ export AWS_ACCESS_KEY_ID=1234
     $ export AWS_SECRET_ACCESS_KEY=abcdefghi
 
-With credentials set you should be able to run the main playbook: -
+You might want to create a `parameters.yaml` file from the
+`parameter-template.yaml` example. Adjust the values to suite
+your needs and then, with AWS credentials set,
+you should be able to run the main playbook: -
 
-    $ ansible-playbook site.yaml
+    $ ansible-playbook -e @parameters.yaml site.yaml
 
 >   The `ansible.cfg` and `inventory.yaml` files exist simply to avoid
     playbook warnings when running from the command-line within this project.
