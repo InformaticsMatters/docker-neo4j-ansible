@@ -18,3 +18,5 @@ graph_wipe: no
 
 graph_pagecache_size_g: 80
 graph_mem_request_g: 96
+
+wait_for_bind: no
