@@ -2,8 +2,13 @@
 
 # A typical set of core variables you might want to set.
 # Change the values to satisfy your graph and cluster.
+#
+# By default the graph is installed in the namespace 'graph',
+# if you want to change this you will need to set 'graph_namespace'
 
 all_image_preset_pullsecret_name: ''
+
+graph_password: SetMe
 
 graph_image_registry: docker.io
 graph_loader_image: informaticsmatters/neo4j-s3-loader

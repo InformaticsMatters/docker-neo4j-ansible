@@ -1,7 +1,5 @@
 ---
 
-graph_namespace: graph
-
 # The 'purpose' label of preferred nodes
 # and the name of any Taint that the node may have
 # in order to limit application deployments to specific nodes.
