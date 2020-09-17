@@ -3,6 +3,8 @@
 [![Build Status](https://travis-ci.com/InformaticsMatters/docker-neo4j-ansible.svg?branch=master)](https://travis-ci.com/InformaticsMatters/docker-neo4j-ansible)
 ![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/informaticsmatters/docker-neo4j-ansible)
 
+[![CodeFactor](https://www.codefactor.io/repository/github/informaticsmatters/docker-neo4j-ansible/badge)](https://www.codefactor.io/repository/github/informaticsmatters/docker-neo4j-ansible)
+
 Ansible Playbooks (and Roles) for the docker-neo4j project.
 
 The main `site` playbook allows for the deployment (and removal)
