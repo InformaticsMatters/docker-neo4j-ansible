@@ -150,7 +150,7 @@
   loop:
   - statefulset
 
-# Wait for graph-loader (always)
+# Wait for graph-loader (unless told not to)
 #
 # This (initialisation) container can take some time to
 # run - it downloads graph data from (typically) AWS S3
@@ -170,9 +170,11 @@
     and g_info.resources[0].status.initContainerStatuses[0].state.terminated is defined
   delay: 60
   retries: "{{ (graph_loader_pod_ready_timeout_minutes|int * 60 / 60)|int }}"
+  when: graph_loader_wait_for_completion|bool
 
 - name: Assert graph-loader exitCode
   assert:
     that:
     - g_info.resources[0].status.initContainerStatuses[0].state.terminated.exitCode is defined
     - g_info.resources[0].status.initContainerStatuses[0].state.terminated.exitCode == 0
+  when: graph_loader_wait_for_completion|bool

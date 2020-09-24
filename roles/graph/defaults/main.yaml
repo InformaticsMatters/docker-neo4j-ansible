@@ -57,7 +57,7 @@ graph_loader_image: informaticsmatters/neo4j-s3-loader
 graph_image: informaticsmatters/neo4j
 graph_tag: '3.5.19'
 graph_pull_policy: IfNotPresent
-graph_loader_deploy: yes
+graph_loader_wait_for_completion: yes
 
 # Providing your own Kubernetes image pull secrets.
 #
