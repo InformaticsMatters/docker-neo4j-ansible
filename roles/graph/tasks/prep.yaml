@@ -10,14 +10,6 @@
 # Install or remove the installation
 # based on whether the 'deploy' variable is yes or no...
 
-# Install essential modules
-- name: Install required modules
-  pip:
-    name:
-    - kubernetes==10.0.1
-    - openshift==0.10.0
-    extra_args: --user
-
 # Kubernetes credentials ------------------------------------------------------
 
 # We don't use the Kubernetes credentials directly,
