@@ -20,26 +20,16 @@ spec:
       securityContext:
         fsGroup: 2000
 
-      # A 'preferred' (not guaranteed)
-      # node selection affinity...
+      # We must have a 'core' node
       affinity:
         nodeAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 1
-            preference:
-              matchExpressions:
-              - key: purpose
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: informaticsmatters.com/purpose
                 operator: In
                 values:
-                - {{ graph_node_purpose }}
-
-      # Node tolerations
-      # (tolerate high-mem nodes to allow us to run on them)
-      tolerations:
-      - key: purpose
-        operator: Equal
-        value: {{ graph_node_purpose }}
-        effect: "NoSchedule"
+                - core
 
 {% if all_image_preset_pullsecret_name|string|length > 0 %}
       imagePullSecrets:

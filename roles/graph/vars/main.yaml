@@ -1,10 +1,5 @@
 ---
 
-# The 'purpose' label of preferred nodes
-# and the name of any Taint that the node may have
-# in order to limit application deployments to specific nodes.
-graph_node_purpose: bigmem
-
 # Use the 'Enterprise Edition' container image?
 # You should not set this unless you have a licence from neo4j to run it.
 # Setting this to 'yes' adds the '-enterprise' suffix to {{ graph_tag }}.
