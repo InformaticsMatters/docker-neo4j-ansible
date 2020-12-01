@@ -93,6 +93,16 @@ graph_core_limit: 16
 graph_loader_pod_ready_timeout_minutes: 90
 graph_pod_ready_timeout: 300
 
+# An S3 endpoint (typically for on-site S3 storage)
+# If set a config-map maps a config file int ~/.aws/config.
+# This requires a suitable graph image
+# (one with the 'awscli_plugin_endpoint' Python module installed).
+# Leave blank for an AWS S3 bucket.
+#
+# If you set this - omit the 'https://' prefix - i.e. just
+# the endpoint (like 'example.com').
+graph_s3_endpoint: ''
+
 #------------------------------------------------------------------------------
 
 # Picked up from the environment

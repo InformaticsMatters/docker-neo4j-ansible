@@ -17,6 +17,7 @@
   - rolebinding
   - role
   - serviceaccount
+  - configmap-s3-config
   when: graph_volume_size_g|int == 0
 
 - name: Remove namespace

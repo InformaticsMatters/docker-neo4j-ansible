@@ -142,6 +142,12 @@
   - service-http
   - service-bolt
 
+- name: Deploy Graph ConfigMap
+  k8s:
+    definition: "{{ lookup('template', 'configmap-s3-config.yaml.j2') }}"
+    wait: yes
+  when: graph_s3_endpoint|string|length > 0
+
 - name: Deploy Graph
   k8s:
     definition: "{{ lookup('template', '{{ item }}.yaml.j2') }}"
