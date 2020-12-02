@@ -90,15 +90,6 @@ spec:
           mountPath: /home/loader/.aws/config
           subPath: config
 {% endif %}
-      volumes:
-      - name: graph-volume
-        persistentVolumeClaim:
-          claimName: {{ graph_pvc }}
-{% if graph_s3_endpoint %}
-      - name: s3-config
-        configMap:
-          name: s3-config
-{% endif %}
 
       containers:
       - name: graph
@@ -152,7 +143,13 @@ spec:
         volumeMounts:
         - mountPath: /data
           name: graph-volume
+
       volumes:
       - name: graph-volume
         persistentVolumeClaim:
           claimName: {{ graph_pvc }}
+{% if graph_s3_endpoint %}
+      - name: s3-config
+        configMap:
+          name: s3-config
+{% endif %}
