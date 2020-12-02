@@ -6,9 +6,16 @@
 - debug:
     var: ansible_version.full
 
-# The 'grand' play.
-# Install or remove the installation
-# based on whether the 'deploy' variable is yes or no...
+# Install essential modules
+# Newer AWS installations clash is if do this so we
+# only do this if we think we have to.
+- name: Install kubernetes modules
+  pip:
+    name:
+    - kubernetes==10.0.1
+    - openshift==0.10.0
+    extra_args: --user
+  when: ansible_version.full in ['2.9.7']
 
 # Kubernetes credentials ------------------------------------------------------
 
