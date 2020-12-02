@@ -87,7 +87,7 @@ spec:
           name: graph-volume
 {% if graph_s3_endpoint %}
         - name: s3-config
-          mountPath: /home/loader/config
+          mountPath: /home/loader/.aws/config
           subPath: config
 {% endif %}
 
