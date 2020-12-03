@@ -7,6 +7,7 @@
     - graph_core_limit|int >= graph_core_request|int
     - graph_password|string|length > 0
     - graph_password|string != 'neo4j'
+    - graph_loader_post_sleep_s|int >= 0
 
 # Check or create the namespace...
 

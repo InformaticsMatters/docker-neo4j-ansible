@@ -91,6 +91,11 @@ graph_core_limit: 16
 # It can take around 40 minutes for 25Gi of data
 # to arrive in the input directory.
 graph_loader_pod_ready_timeout_minutes: 90
+# Graph loader Pod post-sleep seconds.
+# If set this causes the loader pod to sleep prior to completion.
+# Mainly to allow connection and debug.
+graph_loader_post_sleep_s: 0
+
 graph_pod_ready_timeout: 300
 
 # An S3 endpoint (typically for on-site S3 storage)
