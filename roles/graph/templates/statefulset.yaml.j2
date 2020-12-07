@@ -109,11 +109,6 @@ spec:
         - containerPort: 7687
           name: bolt
         env:
-        - name: NEO4J_AUTH
-          valueFrom:
-            secretKeyRef:
-              name: graph-secrets
-              key: neo4j_auth
         - name: NEO4J_dbms_memory_pagecache_size
           value: "{{ graph_pagecache_size_g }}G"
         - name: NEO4J_dbms_memory_heap_initial__size
@@ -138,9 +133,7 @@ spec:
           value: '60'
         - name: CYPHER_ROOT
           value: /data
-        - name: NEO4J_USERNAME
-          value: neo4j
-        - name: NEO4J_PASSWORD
+        - name: GRAPH_PASSWORD
           value: "{{ graph_password }}"
         resources:
           limits:
