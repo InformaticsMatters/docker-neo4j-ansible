@@ -7,7 +7,7 @@ graph_state: present
 # - Namespace
 # - graph PVC name,
 #   which is either pre-previsioned or self-provisioned (see below)
-# - graph (neo4j) password (which cannot be neo4j)
+# - graph (neo4j) password
 #   The password is saved in secrets deployed to the namespace.
 #   The username is assumed to be 'neo4j'
 graph_namespace: graph
