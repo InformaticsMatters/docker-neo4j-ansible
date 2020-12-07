@@ -75,10 +75,6 @@ spec:
           value: "{{ graph_cypher_script_once_content|default('', true) }}"
         - name: CYPHER_ALWAYS_CONTENT
           value: "{{ graph_cypher_script_always_content|default('', true) }}"
-        - name: NEO4J_USERNAME
-          value: neo4j
-        - name: NEO4J_PASSWORD
-          value: "{{ graph_password }}"
 {% if graph_loader_post_sleep_s %}
         - name: POST_SLEEP_S
           value: "{{ graph_loader_post_sleep_s }}"
@@ -142,6 +138,10 @@ spec:
           value: '60'
         - name: CYPHER_ROOT
           value: /data
+        - name: NEO4J_USERNAME
+          value: neo4j
+        - name: NEO4J_PASSWORD
+          value: "{{ graph_password }}"
         resources:
           limits:
             cpu: "{{ graph_core_limit }}"
