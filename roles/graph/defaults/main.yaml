@@ -7,12 +7,12 @@ graph_state: present
 # - Namespace
 # - graph PVC name,
 #   which is either pre-previsioned or self-provisioned (see below)
-# - graph (neo4j) password
+# - graph (neo4j) password (which cannot be neo4j)
 #   The password is saved in secrets deployed to the namespace.
 #   The username is assumed to be 'neo4j'
 graph_namespace: graph
 graph_pvc: graph
-graph_password: neo4j
+graph_password: "{{ lookup('password',  '/dev/null length=12 chars=ascii_letters') }}"
 # If you want the role to create the PVC and namespace
 # (i.e. it is not pre-provisioned) then
 # set a value for 'graph_volume_size_g'.
