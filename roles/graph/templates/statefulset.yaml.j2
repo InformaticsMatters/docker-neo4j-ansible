@@ -122,10 +122,9 @@ spec:
             - /bin/bash
             - -c
             - /readiness-probe.sh
-          initialDelaySeconds: 60
+          initialDelaySeconds: 30
           timoutSeconds: 4
-          periodSeconds: 60
-          failureThreshold: {{ graph_readiness_timeout_m }}
+          periodSeconds: 20
         env:
         - name: NEO4J_dbms_memory_pagecache_size
           value: "{{ graph_pagecache_size_g }}G"
