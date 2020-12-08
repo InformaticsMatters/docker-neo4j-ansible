@@ -10,7 +10,7 @@ graph_use_enterprise_edition: no
 graph_sa: graph
 graph_sa_psp: im-core-unrestricted
 
-# Number of minutes to allow the graph container's startup probe
+# Number of minutes to allow the graph container's readiness probe
 # to yield success.
 #
 # Complex graphs can take a considerable time to initialise
@@ -19,7 +19,7 @@ graph_sa_psp: im-core-unrestricted
 # create indexes and warm-up the cache.
 #
 # The probe is queried every 60 seconds.
-graph_startup_timeout_m: 60
+graph_readiness_timeout_m: 60
 
 # Wait for volume binding?
 # Probably unless multi-zone deployments

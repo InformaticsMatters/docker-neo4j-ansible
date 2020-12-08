@@ -116,19 +116,16 @@ spec:
           name: http
         - containerPort: 7687
           name: bolt
-        startupProbe:
+        readinessProbe:
           exec:
             command:
             - /bin/bash
             - -c
-            - /startup-probe.sh
-          failureThreshold: {{ graph_startup_timeout_m }}
+            - /readiness-probe.sh
+          initialDelaySeconds: 60
+          timoutSeconds: 4
           periodSeconds: 60
-        livenessProbe:
-          tcpSocket:
-            port: 7474
-          failureThreshold: 2
-          periodSeconds: 10
+          failureThreshold: {{ graph_readiness_timeout_m }}
         env:
         - name: NEO4J_dbms_memory_pagecache_size
           value: "{{ graph_pagecache_size_g }}G"
