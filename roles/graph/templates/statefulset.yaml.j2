@@ -75,7 +75,15 @@ spec:
           value: "{{ graph_cypher_script_once_content|default('', true) }}"
         - name: CYPHER_ALWAYS_CONTENT
           value: "{{ graph_cypher_script_always_content|default('', true) }}"
+        - name: IMPORT_DIRECTORY
+          value: /data/data-loader
+        # If we provide NEO4J_dbms_directories_logs
+        # the debug log is erased by the loader.
+        - name: NEO4J_dbms_directories_logs
+          value: /data/logs
 {% if graph_loader_post_sleep_s %}
+        # A fixed period of sleeping after completion
+        # (for debug)
         - name: POST_SLEEP_S
           value: "{{ graph_loader_post_sleep_s }}"
 {% endif %}
@@ -108,6 +116,14 @@ spec:
           name: http
         - containerPort: 7687
           name: bolt
+        startupProbe:
+          exec:
+            command:
+            - /bin/bash
+            - -c
+            - /startup-probe.sh
+          failureThreshold: {{ graph_startup_timeout_m }}
+          periodSeconds: 60
         env:
         - name: NEO4J_dbms_memory_pagecache_size
           value: "{{ graph_pagecache_size_g }}G"

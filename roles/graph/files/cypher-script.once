@@ -2,4 +2,4 @@ CREATE INDEX ON :F2(smiles);
 CREATE INDEX ON :F2(hac);
 CREATE INDEX ON :F2(chac);
 CREATE INDEX ON :VENDOR(cmpd_id);
-CALL db.awaitIndexes(3600);
+CALL db.awaitIndexes(7200);
