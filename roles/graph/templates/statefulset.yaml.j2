@@ -124,6 +124,11 @@ spec:
             - /startup-probe.sh
           failureThreshold: {{ graph_startup_timeout_m }}
           periodSeconds: 60
+        livenessProbe:
+          tcpSocket:
+            port: 7474
+          failureThreshold: 2
+          periodSeconds: 10
         env:
         - name: NEO4J_dbms_memory_pagecache_size
           value: "{{ graph_pagecache_size_g }}G"
