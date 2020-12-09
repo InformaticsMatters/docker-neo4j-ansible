@@ -1,0 +1,23 @@
+---
+kind: Ingress
+apiVersion: networking.k8s.io/v1beta1
+metadata:
+  name: graph-ingress
+  namespace: {{ graph_namespace }}
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt-nginx-{{ graph_cert_issuer|lower }}"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  tls:
+  - hosts:
+    - {{ graph_hostname }}
+    secretName: graph-tls
+  rules:
+  - host: {{ graph_hostname }}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: graph-http
+          servicePort: http
