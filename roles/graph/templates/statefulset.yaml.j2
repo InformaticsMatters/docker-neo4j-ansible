@@ -75,8 +75,6 @@ spec:
           value: "{{ graph_cypher_script_once_content|default('', true) }}"
         - name: CYPHER_ALWAYS_CONTENT
           value: "{{ graph_cypher_script_always_content|default('', true) }}"
-        - name: IMPORT_DIRECTORY
-          value: /data/data-loader
         # If we provide NEO4J_dbms_directories_logs
         # the debug log is erased by the loader.
         - name: NEO4J_dbms_directories_logs
