@@ -13,9 +13,6 @@ graph_sa_psp: im-core-unrestricted
 # Graph hostname.
 # Normally blank. If set an ingress is created.
 graph_hostname: ''
-# The certificate issuer (if a hostname is defined)
-# One of 'production' or 'staging'
-graph_cert_issuer: production
 
 # Wait for volume binding?
 # Probably unless multi-zone deployments
