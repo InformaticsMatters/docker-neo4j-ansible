@@ -61,6 +61,8 @@ spec:
           value: {{ graph_bucket }}
         - name: AWS_BUCKET_PATH
           value: {{ graph_bucket_path }}
+        - name: EXTENSION_SCRIPT
+          value: /data/data-loader/load-neo4j.sh
         - name: SYNC_PATH
           value: data-loader
         - name: GRAPH_WIPE
