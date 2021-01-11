@@ -1,6 +1,7 @@
 # Docker neo4j (Ansible)
 
-[![Build Status](https://travis-ci.com/InformaticsMatters/docker-neo4j-ansible.svg?branch=master)](https://travis-ci.com/InformaticsMatters/docker-neo4j-ansible)
+![lint](https://github.com/InformaticsMatters/docker-neo4j-ansible/workflows/lint/badge.svg)
+
 ![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/informaticsmatters/docker-neo4j-ansible)
 
 [![CodeFactor](https://www.codefactor.io/repository/github/informaticsmatters/docker-neo4j-ansible/badge)](https://www.codefactor.io/repository/github/informaticsmatters/docker-neo4j-ansible)
