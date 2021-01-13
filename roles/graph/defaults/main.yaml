@@ -106,6 +106,10 @@ graph_pod_ready_timeout: 300
 #
 # If you set this - omit the 'https://' prefix - i.e. just
 # the endpoint (like 'example.com').
+#
+#   if setting the endpoint you may also need to over-ride the
+#   'aws_default_region', replacing it with something suitable
+#   (or set it blank '')
 graph_s3_endpoint: ''
 
 #------------------------------------------------------------------------------
