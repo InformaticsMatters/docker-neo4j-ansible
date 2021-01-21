@@ -112,6 +112,13 @@ graph_pod_ready_timeout: 300
 #   (or set it blank '')
 graph_s3_endpoint: ''
 
+# A pull-secret for public images pulled from DockerHub.
+# If set this is the base-64 string that can be used as the value
+# in our Kubernetes Secret as the .dockerconfigjson value.
+# If set it is applied to the ServiceAccount in the namespace
+# and applied to Pods that use that namespace.
+graph_dockerhub_pullsecret: ''
+
 #------------------------------------------------------------------------------
 
 # Picked up from the environment

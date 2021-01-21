@@ -27,6 +27,15 @@
     definition: "{{ lookup('template', 'namespace.yaml.j2') }}"
   when: graph_volume_size_g|int > 0
 
+- name: Create DockerHub image pull secret
+  k8s:
+    definition: "{{ lookup('template', 'secret-dh-imagepull.yaml.j2') }}"
+    wait: yes
+  vars:
+    pull_namespace: "{{ graph_namespace }}"
+    pull_secret: "{{ graph_dockerhub_pullsecret }}"
+  when: graph_dockerhub_pullsecret|string|length > 0
+
 - name: Create Service Account
   k8s:
     definition: "{{ lookup('template', 'serviceaccount.yaml.j2') }}"
