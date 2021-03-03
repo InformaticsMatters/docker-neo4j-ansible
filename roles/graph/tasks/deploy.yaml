@@ -193,11 +193,3 @@
     - g_info.resources[0].status.initContainerStatuses[0].state.terminated.exitCode is defined
     - g_info.resources[0].status.initContainerStatuses[0].state.terminated.exitCode == 0
   when: graph_loader_wait_for_completion|bool
-
-# Ingress ---------------------------------------------------------------------
-
-- name: Deploy Ingress
-  k8s:
-    definition: "{{ lookup('template', 'ingress.yaml.j2') }}"
-    wait: yes
-  when: graph_hostname|string|length > 0
