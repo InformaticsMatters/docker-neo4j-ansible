@@ -20,6 +20,7 @@ spec:
       securityContext:
         fsGroup: 2000
 
+{% if graph_node_affinity_value %}
       # We must have a 'core' node
       affinity:
         nodeAffinity:
@@ -29,7 +30,8 @@ spec:
               - key: informaticsmatters.com/purpose
                 operator: In
                 values:
-                - core
+                - {{ graph_node_affinity_value }}
+{% endif %}
 
 {% if all_image_preset_pullsecret_name|string|length > 0 %}
       imagePullSecrets:

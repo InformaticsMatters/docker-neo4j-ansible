@@ -58,6 +58,9 @@ graph_image: informaticsmatters/neo4j
 graph_tag: '3.5.25'
 graph_pull_policy: IfNotPresent
 graph_loader_wait_for_completion: yes
+# The graph node affinity,
+# if an empty string no node affinity is applied.
+graph_node_affinity_value: 'core'
 
 # Providing your own Kubernetes image pull secrets.
 #
