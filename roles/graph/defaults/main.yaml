@@ -32,6 +32,12 @@ graph_bucket_path: build/vendor/toxcast/2019-10-24/build-1
 # The state of this value is used to pass either "Yes" or "no"
 # to the loader container's GRAPH_WIPE variable.
 graph_wipe: yes
+# Do we force early readiness on the graph Pod?
+# Setting this to 'yes' will result in a ready Pod before
+# the once and always scrips have had time to run.
+# This results in the creation of the environment variable
+# 'FORCE_EARLY_READINESS'. Any value results in early readiness.
+graph_force_early_readiness: no
 
 # Path to built-in cypher scripts (in 'files').
 # Default content can be found in files directory.

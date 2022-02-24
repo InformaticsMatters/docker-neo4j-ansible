@@ -73,6 +73,10 @@ spec:
 {% else %}
           value: "no"
 {% endif %}
+{% if graph_force_early_readiness %}
+        - name: FORCE_EARLY_READINESS
+          value: "yes"
+{% endif %}
         - name: CYPHER_ROOT
           value: /data
         - name: CYPHER_ONCE_CONTENT
