@@ -128,7 +128,7 @@ graph_s3_endpoint: ''
 # and applied to Pods that use that namespace.
 graph_dockerhub_pullsecret: ''
 
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 # Picked up from the environment
 # (typically injected by AWX/Tower)...
