@@ -73,10 +73,6 @@ spec:
 {% else %}
           value: "no"
 {% endif %}
-{% if graph_force_early_readiness %}
-        - name: FORCE_EARLY_READINESS
-          value: "yes"
-{% endif %}
         - name: CYPHER_ROOT
           value: /data
         - name: CYPHER_ONCE_CONTENT
@@ -158,6 +154,10 @@ spec:
           value: /data
         - name: GRAPH_PASSWORD
           value: "{{ graph_password }}"
+{% if graph_force_early_readiness %}
+        - name: FORCE_EARLY_READINESS
+          value: "yes"
+{% endif %}
         resources:
           limits:
             cpu: "{{ graph_core_limit }}"
