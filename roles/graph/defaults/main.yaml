@@ -91,8 +91,9 @@ graph_heap_g: 8
 graph_mem_request_g: 48
 # The CPU core request and limit.
 # Measured in whole cores.
+# Community edition is (at the time of writing) limited to 4 cores.
 graph_core_request: 4
-graph_core_limit: 16
+graph_core_limit: 4
 
 # Timeout for loader and graph pods...
 #
