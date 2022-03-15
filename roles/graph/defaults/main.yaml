@@ -89,6 +89,7 @@ all_image_preset_pullsecret_name: ''
 graph_pagecache_size_g: 32
 graph_heap_g: 8
 graph_mem_request_g: 48
+graph_mem_limit_g: 0
 # The CPU core request and limit.
 # Measured in whole cores.
 # Community edition is (at the time of writing) limited to 4 cores.

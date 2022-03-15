@@ -161,6 +161,9 @@ spec:
         resources:
           limits:
             cpu: "{{ graph_core_limit }}"
+{% if graph_mem_limit_g %}
+            memory: "{{ graph_mem_limit_g }}Gi"
+{% endif %}
           requests:
             cpu: "{{ graph_core_request }}"
             memory: "{{ graph_mem_request_g }}Gi"
