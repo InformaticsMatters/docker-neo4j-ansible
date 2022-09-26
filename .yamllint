@@ -7,6 +7,7 @@ yaml-files:
 
 ignore: |
   .github/
+  venv/
   roles/graph/templates/serviceaccount.yaml.j2
   roles/graph/templates/statefulset.yaml.j2
 
