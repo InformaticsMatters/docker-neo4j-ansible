@@ -6,7 +6,7 @@
 
 [![CodeFactor](https://www.codefactor.io/repository/github/informaticsmatters/docker-neo4j-ansible/badge)](https://www.codefactor.io/repository/github/informaticsmatters/docker-neo4j-ansible)
 
-Ansible Playbooks (and Roles) for the docker-neo4j project.
+Ansible Playbooks (and Roles) for our [docker-neo4j] project.
 
 The main `site` playbook allows for the deployment (and removal)
 of a neo4j server and fragment network. The playbook employs the
@@ -68,3 +68,5 @@ For more detailed information refer to the documentation for the
 `all_image_preset_pullsecret_name` variable in `roles/graph/defaults/main.yaml`.
 
 ---
+
+[docker-neo4j]: https://github.com/InformaticsMatters/docker-neo4j
