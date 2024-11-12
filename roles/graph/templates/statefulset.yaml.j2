@@ -27,10 +27,8 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
             - matchExpressions:
-              - key: informaticsmatters.com/purpose
-                operator: In
-                values:
-                - {{ graph_node_affinity_value }}
+              - key: informaticsmatters.com/purpose-{{ graph_node_affinity_value }}
+                operator: Exists
 {% endif %}
 
 {% if all_image_preset_pullsecret_name|string|length > 0 %}
