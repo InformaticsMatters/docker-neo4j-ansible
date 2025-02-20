@@ -17,8 +17,6 @@ spec:
         name: graph
     spec:
       serviceAccountName: {{ graph_sa }}
-      securityContext:
-        fsGroup: 2000
 
 {% if graph_node_affinity_value %}
       # We must have a 'core' node
@@ -94,6 +92,11 @@ spec:
           requests:
             cpu: 1000m
             memory: 1Gi
+        securityContext:
+          runAsUser: 7474
+          runAsGroup: 7474
+          fsGroup: 7474
+          allowPrivilegeEscalation: false
         volumeMounts:
         - mountPath: /data
           name: graph-volume
@@ -170,6 +173,11 @@ spec:
           requests:
             cpu: "{{ graph_core_request }}"
             memory: "{{ graph_mem_request_g }}Gi"
+        securityContext:
+          runAsUser: 7474
+          runAsGroup: 7474
+          fsGroup: 7474
+          allowPrivilegeEscalation: false
         volumeMounts:
         - mountPath: /data
           name: graph-volume
