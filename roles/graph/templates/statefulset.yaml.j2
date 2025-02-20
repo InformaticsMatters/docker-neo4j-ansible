@@ -111,6 +111,11 @@ spec:
         image: "{{ graph_image_registry }}/{{ graph_image }}:{{ graph_tag }}"
 {% endif %}
         imagePullPolicy: {{ graph_pull_policy }}
+        # A termination log (we use the neo4j debug.log)
+        # But if there is no termination log
+        # fallback to stdout logs on error.
+        terminationMessagePath: /data/logs/debug.log
+        terminationMessagePolicy: FallbackToLogsOnError
         ports:
         - containerPort: 7474
           name: http
