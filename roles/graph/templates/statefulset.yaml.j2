@@ -177,6 +177,18 @@ spec:
         - mountPath: /data
           name: graph-volume
 
+      - name: sidecar
+        image: "{{ graph_image_registry }}/{{ graph_image }}-sidecar:{{ graph_tag }}"
+        imagePullPolicy: {{ graph_pull_policy }}
+        env:
+        - name: CYPHER_ROOT
+          value: /data
+        - name: NEO4J_AUTH
+          value: neo4j/{{ graph_password }}
+        volumeMounts:
+        - mountPath: /data
+          name: graph-volume
+
       volumes:
       - name: graph-volume
         persistentVolumeClaim:
